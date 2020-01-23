@@ -1,0 +1,7 @@
+{
+  "presets": ["@babel/preset-env"],
+  "plugins": [
+    ["angularjs-annotate", { "explicitOnly" : true}],
+    ["@babel/transform-runtime", { "regenerator": true }]
+  ]
+}

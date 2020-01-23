@@ -1,0 +1,101 @@
+<div id="auth" ng-cloak>
+
+    <!--LOG IN FORM-->
+    <div layout="column"
+         layout-align="center center"
+         layout-fill="layout-fill"
+         ng-if="auth.authType === 1">
+        <div layout="column" class="authBox md-whiteframe-z1">
+            <md-toolbar class="bg-green">
+                <div class="md-toolbar-tools">
+                    <img src="./img/angello.png" alt="angello logo" class="logo">
+                </div>
+            </md-toolbar>
+            <form name="loginForm" id="login-form" ng-submit="auth.login($event)">
+                <md-content layout="column" class="md-padding">
+                    <md-input-container>
+                        <label>Email</label>
+                        <input type="email" ng-model="auth.loginForm.email" required/>
+                        <div ng-messages="loginForm.email.$error">
+                            <div ng-message="required">This is required.</div>
+                        </div>
+                    </md-input-container>
+                    <md-input-container>
+                        <label>Password</label>
+                        <input type="password" ng-model="auth.loginForm.password" name="password" required/>
+                        <div ng-messages="loginForm.password.$error" role="alert">
+                            <div ng-message="required">This is required.</div>
+                        </div>
+                    </md-input-container>
+                    <div layout="row" layout-align="center center" ng-show="auth.errorMessage">
+                        <p class="error">{{ auth.errorMessage }}</p>
+                    </div>
+                    <div layout="row" layout-align="center center">
+                        <md-button type="submit" class="md-raised md-primary-green">LOG IN</md-button>
+                        <!--<div flex="flex"></div>
+                        <md-button href="" md-no-ink>Forgot Password</md-button>-->
+                    </div>
+                    <md-divider></md-divider>
+                    <md-button md-no-ink ng-click="auth.changeAuthType(2)" style="color: black">SIGN UP</md-button>
+                </md-content>
+            </form>
+        </div>
+    </div>
+
+    <!--SIGN UP FORM-->
+    <div layout="column" layout-align="center center" layout-fill="layout-fill" ng-if="auth.authType === 2">
+        <div layout="column" class="authBox md-whiteframe-z1">
+            <md-toolbar class="bg-green">
+                <div class="md-toolbar-tools">
+                    <img src="./img/angello.png" alt="angello logo" class="logo">
+                </div>
+            </md-toolbar>
+            <form name="signupForm" id="signup-form" ng-submit="auth.register($event)">
+                <md-content layout="column" class="md-padding">
+                    <md-input-container>
+                        <label>First Name</label>
+                        <input required type="text" ng-model="auth.signupForm.firstName"/>
+                        <div ng-messages="signupForm.firstName.$error">
+                            <div ng-message="required">This is required.</div>
+                        </div>
+                    </md-input-container>
+                    <md-input-container>
+                        <label>Last Name</label>
+                        <input required type="text" ng-model="auth.signupForm.lastName"/>
+                        <div ng-messages="signupForm.lastName.$error">
+                            <div ng-message="required">This is required.</div>
+                        </div>
+                    </md-input-container>
+                    <md-input-container>
+                        <label>Email</label>
+                        <input required type="email" ng-model="auth.signupForm.email"/>
+                        <div ng-messages="signupForm.email.$error">
+                            <div ng-message="required">This is required.</div>
+                        </div>
+                    </md-input-container>
+                    <md-input-container>
+                        <label>Password</label>
+                        <input required type="password" ng-model="auth.signupForm.password" name="password"/>
+                        <div ng-messages="signupForm.password.$error" role="alert">
+                            <div ng-message="required">This is required.</div>
+                        </div>
+                    </md-input-container>
+                    <div layout="row" layout-align="center center" ng-show="auth.errorMessage">
+                        <p class="error">{{ auth.errorMessage }}</p>
+                    </div>
+                    <div layout="row" layout-align="center center">
+                        <md-button type="submit" class="md-raised md-primary-green">SIGN UP</md-button>
+                    </div>
+                    <md-divider></md-divider>
+                    <md-button md-no-ink ng-click="auth.changeAuthType(1)" style="color: black">LOGIN</md-button>
+                </md-content>
+            </form>
+        </div>
+    </div>
+
+
+  <button ng-click="auth.logout()">Log Out</button>
+  <a class="nav-item nav-link" ui-sref="blog" ui-sref-active="active">Blog</a>
+
+
+</div>

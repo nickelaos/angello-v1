@@ -1,0 +1,76 @@
+@import "global";
+@import "helpers";
+@import "bootstrap";
+@import "font-awesome";
+@import "angello";
+
+/* General
+-------------------------------------------------- */
+.md-primary-green {
+    background-color: $darkGreen !important;
+    color: white !important;
+}
+
+.bg-green {
+    background-color: $darkGreen !important;
+}
+
+html {
+    overflow-y: scroll;
+}
+
+body {
+    min-height: 100%;
+
+    .main {
+        height: 100%;
+
+        md-content {
+            color: white;
+        }
+
+        .logo {
+            height: 40px;
+            width: 144px;
+        }
+    }
+}
+
+
+/* Fixed Navbar
+-------------------------------------------------- */
+.fixed-top {
+    //min-height: 4.1rem;
+}
+
+
+/* Sticky footer
+-------------------------------------------------- */
+/*
+$footer-height: 3.5rem;
+
+html {
+    position: relative;
+    min-height: 100%;
+}
+
+body {
+    margin-bottom: (2*$footer-height);
+}
+
+.footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: $footer-height;
+    line-height: $footer-height; !* Vertically center the text there *!
+    background-color: $gray-200;
+
+    p {
+        margin: 0;
+    }
+
+    .to-top {
+        font-size: $small-font-size;
+    }
+}*/

@@ -1,0 +1,28 @@
+<div>
+    <toolbar></toolbar>
+    <md-content id="storyboard" ng-cloak>
+        <div class="list-wrapper">
+            <ul class="list"
+                ng-if="storyboard.statuses.length"
+                ng-repeat="status in storyboard.statuses">
+                <h3 class="status">{{status.name}}</h3>
+                <hr/>
+                <li ng-repeat="story in storyboard.stories | filter: { status: status.value }"
+                    ng-if="storyboard.stories.length"
+                    ng-click="storyboard.setCurrentStory(story);
+                              storyboard.showStoryDialog($event, 'edit')"
+                    class="story">
+                    <story-summary data="story"></story-summary>
+                </li>
+                <li class="mt-2">
+                    <md-button class="md-fab md-mini md-primary-green md-hue-2"
+                               aria-label="Add story"
+                               ng-click="storyboard.setCurrentStory(null);
+                                         storyboard.showStoryDialog($event, 'create', status.value)">
+                        <i class="fa fa-plus"></i>
+                    </md-button>
+                </li>
+            </ul>
+        </div>
+    </md-content>
+</div>

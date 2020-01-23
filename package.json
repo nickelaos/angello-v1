@@ -1,0 +1,76 @@
+{
+  "name": "starter-webpack-angularjs",
+  "version": "1.0.0",
+  "description": "A starter for a project with AngularJS (1.x), Bootstrap (4.x) and Font Awesome (4.x) powered by Webpack (3.x).",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cducrot/starter-webpack-angularjs.git"
+  },
+  "bugs": {
+    "url": "https://github.com/cducrot/starter-webpack-angularjs/issues"
+  },
+  "homepage": "https://github.com/cducrot/starter-webpack-angularjs",
+  "keywords": [],
+  "author": "Christian Ducrot <christian@ducrot.de>",
+  "license": "MIT",
+  "browserslist": [
+    ">1%"
+  ],
+  "scripts": {
+    "start": "webpack-dev-server --open --config webpack.dev.js",
+    "build": "webpack --config webpack.prod.js",
+    "test": "karma start",
+    "test:live": "karma start --auto-watch --no-single-run"
+  },
+  "dependencies": {
+    "@babel/runtime": "^7.7.7",
+    "@uirouter/angularjs": "^1.0.18",
+    "angular": "^1.7.0",
+    "angular-animate": "^1.7.0",
+    "angular-aria": "^1.7.9",
+    "angular-auth0": "^3.0.0",
+    "angular-drag-drop": "^3.2.0",
+    "angular-material": "^1.1.20",
+    "auth0-js": "^9.11.2",
+    "bootstrap": "^4.1.1",
+    "font-awesome": "^4.7.0",
+    "holderjs": "^2.9.4",
+    "ui-bootstrap4": "^3.0.3"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.7.7",
+    "@babel/plugin-transform-runtime": "^7.7.6",
+    "@babel/preset-env": "^7.1.0",
+    "angular-mocks": "^1.7.0",
+    "angular-storage": "0.0.15",
+    "autoprefixer": "^9.1.5",
+    "babel-loader": "^8.0.4",
+    "babel-plugin-angularjs-annotate": "^0.10.0",
+    "babel-polyfill": "^6.26.0",
+    "clean-webpack-plugin": "^3.0.0",
+    "css-loader": "^3.4.0",
+    "cssnano": "^4.1.4",
+    "file-loader": "^5.0.2",
+    "html-loader": "^0.5.5",
+    "html-webpack-plugin": "^3.2.0",
+    "jasmine-core": "^3.2.1",
+    "karma": "^4.4.1",
+    "karma-coverage": "^2.0.1",
+    "karma-jasmine": "^2.0.1",
+    "karma-phantomjs-launcher": "^1.0.4",
+    "karma-sourcemap-loader": "^0.3.7",
+    "karma-spec-reporter": "0.0.32",
+    "karma-webpack": "^4.0.2",
+    "mini-css-extract-plugin": "^0.9.0",
+    "node-sass": "^4.9.0",
+    "phantomjs-prebuilt": "^2.1.16",
+    "postcss-loader": "^3.0.0",
+    "sass-loader": "^8.0.0",
+    "style-loader": "^1.1.2",
+    "uglifyjs-webpack-plugin": "^2.0.1",
+    "webpack": "^4.20.2",
+    "webpack-cli": "^3.1.2",
+    "webpack-dev-server": "^3.1.9",
+    "webpack-merge": "^4.1.2"
+  }
+}

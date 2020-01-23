@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>starter-webpack-angularjs</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <link href="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.9/angular-material.min.css" rel="stylesheet" >
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+</head>
+<body ng-app="app" ng-controller="AppController as app" ng-strict-di>
+
+<!--<header class="navbar navbar-expand-sm navbar-dark fixed-top bg-dark">
+    <a class="navbar-brand mr-0 mr-md-2" href="/" aria-label="ACME co">
+        <images class="d-block" height="40" src="./assets/logo-negative.svg" alt="ACME co"/>
+    </a>
+    <button type="button" class="navbar-toggler" ng-click="app.isCollapsed = !app.isCollapsed" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" uib-collapse="app.isCollapsed">
+        <div class="navbar-nav ml-auto">
+            <a class="nav-item nav-link" ui-sref="home" ui-sref-active="active">Home</a>
+            <a class="nav-item nav-link" ui-sref="auth" ui-sref-active="active">Auth</a>
+            <a class="nav-item nav-link" ui-sref="blog" ui-sref-active="active">Blog</a>
+            <a class="nav-item nav-link" ui-sref="grids" ui-sref-active="active">Grids</a>
+            <a class="nav-item nav-link" ui-sref="album" ui-sref-active="active">Album</a>
+            <a class="nav-item nav-link disabled" href="#">Disabled</a>
+        </div>
+    </div>
+</header>-->
+
+<main class="main" role="main">
+    <ui-view></ui-view>
+</main>
+
+<footer>
+    <!--<div class="container">
+        <p class="float-right to-top">
+            <a href="#">Back to top</a>
+        </p>
+        <p><images class="mr-2" height="30" src="./assets/logo.svg" alt="ACME co"/> | &copy; {{app.date| date:'yyyy'}} </p>
+    </div>-->
+
+    <!--Firebase-->
+    <script src="https://www.gstatic.com/firebasejs/7.6.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.6.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.6.1/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.6.1/firebase-functions.js"></script>
+
+    <script>
+
+      var firebaseConfig = {
+        apiKey: "AIzaSyD4j2eGTvnMQWLQPgdFrDD5cUVFtZJ8MCk",
+        authDomain: "angello-a56cb.firebaseapp.com",
+        databaseURL: "https://angello-a56cb.firebaseio.com",
+        projectId: "angello-a56cb",
+        storageBucket: "angello-a56cb.appspot.com",
+        messagingSenderId: "1029380295273",
+        appId: "1:1029380295273:web:46a34a26e2b53068c730f8"
+      };
+
+      firebase.initializeApp(firebaseConfig);
+
+      const fbAuth = firebase.auth();
+      const db = firebase.firestore();
+      const functions = firebase.functions();
+
+    </script>
+</footer>
+
+</body>
+</html>
