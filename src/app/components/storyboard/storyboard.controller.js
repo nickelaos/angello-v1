@@ -25,6 +25,16 @@ function StoryboardController($rootScope,
     storyboard.setCurrentStory = setCurrentStory;
     storyboard.showStoryDialog = showStoryDialog;
 
+    $scope.drag = drag;
+    $scope.drop = drop;
+    $scope.dragOver = dragOver;
+    $scope.dragLeave = dragLeave;
+    $scope.dragEnd = dragEnd;
+
+    $scope.draggableItemId = null;
+    $scope.draggableItemHeight = 0;
+    $scope.targetItemId = null;
+
     /*window.$rootScope = $rootScope; // temp
     window.$scope = $scope; // temp*/
 
@@ -58,7 +68,7 @@ function StoryboardController($rootScope,
             return docData;
         });
 
-        console.log(storyboard.stories);
+        //console.log(storyboard.stories);
 
         storyboard.lastOrderIndex = defineLastOrderIndex();
         $rootScope.$apply();
@@ -99,5 +109,85 @@ function StoryboardController($rootScope,
         console.log(snapshot);
         setStories(snapshot)
     });*/
+
+    /* DRAG & DROP*/
+    function insertAfter(newNode, referenceNode) {
+        referenceNode.parentNode.insertBefore(newNode, referenceNode.nextSibling);
+    }
+
+    function drag(ev) {
+        const draggableItemId = ev.target.closest('.story').id;
+        const draggableItemHeight = String(ev.target.closest('.story').clientHeight);
+
+        /*const el = document.getElementById(draggableItemId);
+        const fakeGhost = el.cloneNode(true);
+        fakeGhost.style.opacity = '100%';
+        document.body.appendChild(fakeGhost);
+        ev.dataTransfer.setDragImage(fakeGhost, 0, 0);*/
+        /*const el = document.getElementById(draggableItemId);
+        el.classList.add('dragging-story');*/
+
+        ev.dataTransfer.setData('id', draggableItemId);
+        ev.dataTransfer.dropEffect = 'move';
+        ev.dataTransfer.effectAllowed = 'move';
+
+        $scope.draggableItemId = draggableItemId;
+        $scope.draggableItemHeight = draggableItemHeight;
+    }
+
+    function drop(ev) {
+        console.log('drop', ev);
+        ev.preventDefault();
+
+        const draggableItemId = ev.dataTransfer.getData("id");
+        const draggableEl = document.getElementById(draggableItemId);
+
+        const targetEl = ev.target.closest('.story');
+        //const targetList = ev.target.closest('.list');
+
+        //targetList.insertBefore(draggableEl, targetEl);
+        insertAfter(draggableEl, targetEl);
+
+        ev.dataTransfer.clearData();
+        dragEnd();
+    }
+
+    function hideDropZones() {
+        const dropZones = document.getElementsByClassName('drop-zone');
+        if (!dropZones) return;
+        for (let i = 0; i < dropZones.length; i++) {
+            dropZones[i].style.height = '5px';
+            dropZones[i].style.opacity = '0';
+        }
+    }
+
+    function dragOver(ev) {
+        ev.preventDefault();
+
+        const targetEl = ev.target.closest('.story');
+        if ($scope.draggableItemId === targetEl.id) return;
+
+        let targetZone = ev.target.closest('.drop-zone') || targetEl.querySelector('.drop-zone');
+        if (!targetZone || !targetEl) return;
+
+        targetZone.style.height = $scope.draggableItemHeight + 'px';
+        targetZone.style.opacity = '100%';
+    }
+
+    function dragLeave(ev) {
+        ev.preventDefault();
+        hideDropZones();
+    }
+
+    function dragEnd() {
+        /*const el = document.getElementById($scope.draggableItemId);
+        el.classList.remove('dragging-story');*/
+
+        hideDropZones();
+
+        $scope.draggableItemId = null;
+        $scope.draggableItemHeight = 0;
+        $scope.targetItemId = null;
+    }
 
 }

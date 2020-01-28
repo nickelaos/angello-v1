@@ -2,6 +2,7 @@
 @import "helpers";
 @import "bootstrap";
 @import "font-awesome";
+@import "dnd";
 @import "angello";
 
 /* General
@@ -24,6 +25,7 @@ body {
 
     .main {
         height: 100%;
+        overflow: auto;
 
         md-content {
             color: white;

@@ -11,10 +11,6 @@ import ngAnimate from 'angular-animate';
 import collapse from 'ui-bootstrap4/src/collapse';
 import uirouter from '@uirouter/angularjs';
 
-/*const dnd = angular.module('dnd', [
-  require('angular-drag-drop'),
-]).name;*/
-
 import appConfig from './app.config';
 import appRun from './app.run';
 import AppController from './app.controller';
@@ -40,9 +36,6 @@ angular
         ngAnimate,
         collapse,
         uirouter,
-
-            //dnd,
-
         home,
         blog,
         grids,

@@ -4,17 +4,56 @@
         <div class="list-wrapper">
             <ul class="list"
                 ng-if="storyboard.statuses.length"
-                ng-repeat="status in storyboard.statuses">
+                ng-repeat="status in storyboard.statuses"
+            >
                 <h3 class="status">{{status.name}}</h3>
-                <hr/>
+                <hr>
+
+                <li class="story list-drop-zone">
+                    <div class="drop-zone"
+                         ondrop="angular.element(this).scope().drop(event)"
+                         ondragover="angular.element(this).scope().dragOver(event)"
+                         ondragleave="angular.element(this).scope().dragLeave(event)"
+                         ondragend="angular.element(this).scope().dragEnd()"
+                    >
+                    </div>
+                </li>
+
                 <li ng-repeat="story in storyboard.stories | filter: { status: status.value }"
                     ng-if="storyboard.stories.length"
                     ng-click="storyboard.setCurrentStory(story);
                               storyboard.showStoryDialog($event, 'edit')"
-                    class="story">
-                    <story-summary data="story"></story-summary>
+                    ng-attr-id="{{ story.id }}"
+                    class="story"
+                    draggable="true"
+
+                    ondragstart="angular.element(this).scope().drag(event)"
+                    ondrop="angular.element(this).scope().drop(event)"
+                    ondragover="angular.element(this).scope().dragOver(event)"
+                    ondragleave="angular.element(this).scope().dragLeave(event)"
+                    ondragend="angular.element(this).scope().dragEnd()"
+                >
+
+                    <div class="story-container"
+                         ondrop="angular.element(this).scope().drop(event)"
+                         ondragover="angular.element(this).scope().dragOver(event)"
+                         ondragleave="angular.element(this).scope().dragLeave(event)"
+                         ondragend="angular.element(this).scope().dragEnd()"
+                    >
+                        <story-summary data="story"></story-summary>
+                    </div>
+
+                    <div class="drop-zone"
+                         ondrop="angular.element(this).scope().drop(event)"
+                         ondragover="angular.element(this).scope().dragOver(event)"
+                         ondragleave="angular.element(this).scope().dragLeave(event)"
+                         ondragend="angular.element(this).scope().dragEnd()"
+                    >
+                    </div>
+
                 </li>
-                <li class="mt-2">
+
+                <li class="mt-2 add-story-container">
                     <md-button class="md-fab md-mini md-primary-green md-hue-2"
                                aria-label="Add story"
                                ng-click="storyboard.setCurrentStory(null);
