@@ -12,6 +12,11 @@
     color: white !important;
 }
 
+.md-primary-red {
+    background-color: $red !important;
+    color: white !important;
+}
+
 .bg-green {
     background-color: $darkGreen !important;
 }
@@ -36,6 +41,17 @@ body {
             width: 144px;
         }
     }
+}
+
+/*Toolbar menu*/
+.md-menu {
+    margin: 0 !important;
+}
+
+.md-open-menu-container {
+    right: 140px !important;
+    left: auto !important;
+    top: 70px !important;
 }
 
 

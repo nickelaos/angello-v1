@@ -24,9 +24,9 @@
                 <div layout="row">
                     <md-input-container flex="50">
                         <label>Status</label>
-                        <md-select ng-model="storyData.status">
-                            <md-option ng-repeat="status in statuses" ng-value="status.value">
-                                {{ status.name }}
+                        <md-select ng-model="storyData.listId">
+                            <md-option ng-repeat="status in statuses" ng-value="status.id">
+                                {{ status.title }}
                             </md-option>
                         </md-select>
                     </md-input-container>

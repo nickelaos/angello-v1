@@ -1,0 +1,56 @@
+<md-dialog aria-label="List Dialog" class="list-dialog">
+    <form ng-submit="submitAction()" ng-cloak>
+        <md-toolbar class="bg-green">
+            <div class="md-toolbar-tools">
+                <h2>{{ actionLabel }}</h2>
+                <span flex></span>
+                <md-button class="md-icon-button" ng-click="closeDialog()">
+                    <i class="fa fa-close"></i>
+                </md-button>
+            </div>
+        </md-toolbar>
+
+        <md-dialog-content>
+            <div class="md-dialog-content">
+                <md-input-container class="md-block" flex-gt-sm>
+                    <label>Title</label>
+                    <input ng-model="listData.title" required>
+                </md-input-container>
+            </div>
+        </md-dialog-content>
+
+        <md-dialog-actions>
+            <div flex="30" layout="row" layout-align="start">
+                <md-button class="md-warn md-raised"
+                           ng-click="deleteList()"
+                           ng-if="action === 'edit'">
+                    DELETE
+                </md-button>
+            </div>
+            <div flex="70" layout="row" layout-align="end">
+                <md-button ng-click="closeDialog()" aria-label="Close Dialog">
+                    CANCEL
+                </md-button>
+                <md-button type="submit" class="md-primary-green md-raised" aria-label="Save">
+                    {{ action.toUpperCase() }}
+                </md-button>
+            </div>
+        </md-dialog-actions>
+    </form>
+</md-dialog>
+
+<style>
+    .list-dialog {
+        width: 50% !important;
+        max-width: 50% !important;
+        background-color: #eee !important;
+    }
+
+    .md-dialog-content {
+        padding: 20px !important;
+    }
+
+    md-dialog-actions {
+        padding: 0 20px 10px 12px !important;
+    }
+</style>

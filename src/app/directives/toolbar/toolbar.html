@@ -5,9 +5,23 @@
                 <img src="../../../assets/img/angello.png" alt="angello logo" class="logo">
             </div>
             <div class="menu" flex="70" layout="row" layout-align="end">
-                <md-button class="md-fab md-mini md-primary-green md-hue-2" aria-label="Add story">
-                    <i class="fa fa-plus"></i>
-                </md-button>
+
+                <md-menu>
+                    <md-button class="md-fab md-mini md-primary-red md-hue-2"
+                               aria-label="Add Item"
+                               ng-click="$mdMenu.open()"
+                    >
+                        <i class="fa fa-plus"></i>
+                    </md-button>
+                    <md-menu-content width="3">
+                        <md-menu-item ng-repeat="item in toolbar.menuItems">
+                            <md-button ng-click="toolbar.emitAction(item.value)">
+                                {{item.title}}
+                            </md-button>
+                        </md-menu-item>
+                    </md-menu-content>
+                </md-menu>
+
                 <md-button ng-click="toolbar.logout()">
                     Log Out
                 </md-button>

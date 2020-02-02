@@ -1,12 +1,14 @@
 <div>
     <toolbar></toolbar>
-    <md-content id="storyboard" ng-cloak>
-        <div class="list-wrapper">
+    <md-content id="storyboard">
+        <div class="list-wrapper"
+             ng-cloak
+             ng-if="storyboard.lists.length && storyboard.stories.length">
             <ul class="list"
-                ng-if="storyboard.statuses.length"
-                ng-repeat="status in storyboard.statuses"
+                ng-if="storyboard.lists.length"
+                ng-repeat="list in storyboard.lists"
             >
-                <h3 class="status">{{status.name}}</h3>
+                <h3 class="list-title">{{list.title}}</h3>
                 <hr>
 
                 <li class="story list-drop-zone">
@@ -19,7 +21,7 @@
                     </div>
                 </li>
 
-                <li ng-repeat="story in storyboard.stories | filter: { status: status.value }"
+                <li ng-repeat="story in storyboard.stories | filter: { listId: list.id }"
                     ng-if="storyboard.stories.length"
                     ng-click="storyboard.setCurrentStory(story);
                               storyboard.showStoryDialog($event, 'edit')"
@@ -57,7 +59,7 @@
                     <md-button class="md-fab md-mini md-primary-green md-hue-2"
                                aria-label="Add story"
                                ng-click="storyboard.setCurrentStory(null);
-                                         storyboard.showStoryDialog($event, 'create', status.value)">
+                                         storyboard.showStoryDialog($event, 'create', list.id)">
                         <i class="fa fa-plus"></i>
                     </md-button>
                 </li>

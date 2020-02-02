@@ -25,8 +25,8 @@ import storyboard from './components/storyboard';
 import toolbar from './directives/toolbar/toolbar.directive';
 
 import StoriesService from './services/stories.service';
-import STORY_STATUSES from './services/statuses.service';
-import STORY_TYPES from './services/storyTypes.service';
+import ListsService from './services/lists.service';
+import STORY_TYPES from './services/storyTypes.service'; // temp
 
 angular
     .module('app', [
@@ -48,5 +48,5 @@ angular
     .run(appRun)
     .controller('AppController', AppController)
     .service('StoriesService', StoriesService)
-    .value('STORY_STATUSES', STORY_STATUSES)
+    .service('ListsService', ListsService)
     .value('STORY_TYPES', STORY_TYPES);

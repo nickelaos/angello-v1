@@ -1,7 +1,10 @@
+import ListController from './list/list.controller';
+import ListTemplate from './list/list.html';
+
 import StoryController from './story/story.controller';
 import StoryTemplate from './story/story.html';
 
-StoryboardController.$inject = ['$rootScope', '$scope', '$state', '$location', '$mdDialog', 'StoriesService', 'STORY_STATUSES', 'STORY_TYPES'];
+StoryboardController.$inject = ['$rootScope', '$scope', '$state', '$location', '$mdDialog', 'StoriesService', 'ListsService', 'STORY_TYPES'];
 export default StoryboardController;
 
 function StoryboardController($rootScope,
@@ -10,18 +13,25 @@ function StoryboardController($rootScope,
                               $location,
                               $mdDialog,
                               StoriesService,
-                              STORY_STATUSES,
+                              ListsService,
                               STORY_TYPES) {
 
     const storyboard = this;
 
+    storyboard.currentListId = null;
+    storyboard.currentList = null;
+    storyboard.editedList = {};
+
     storyboard.currentStoryId = null;
     storyboard.currentStory = null;
     storyboard.editedStory = {};
+
     storyboard.stories = [];
     storyboard.types = STORY_TYPES;
-    storyboard.statuses = STORY_STATUSES;
+    storyboard.lists = [];
 
+    storyboard.setCurrentList = setCurrentList;
+    storyboard.showListDialog = showListDialog;
     storyboard.setCurrentStory = setCurrentStory;
     storyboard.showStoryDialog = showStoryDialog;
 
@@ -43,13 +53,44 @@ function StoryboardController($rootScope,
     // METHODS --------------------------------------------------------
 
     function init() {
+        getLists();
         getStories();
+    }
+
+    function setCurrentList(list) {
+        storyboard.currentListId = list ? list.id : null;
+        storyboard.currentList = list;
+        storyboard.editedList = angular.copy(storyboard.currentList);
     }
 
     function setCurrentStory(story) {
         storyboard.currentStoryId = story ? story.id : null;
         storyboard.currentStory = story;
         storyboard.editedStory = angular.copy(storyboard.currentStory);
+    }
+
+    function getLists() {
+        const userUID = localStorage.getItem('userUID');
+        if (!userUID) return;
+        ListsService.fetchListsByUserId(userUID)
+            .onSnapshot(snapshot => {
+                setLists(snapshot);
+            }, err => console.log(err.message));
+    }
+
+    function setLists(snapshot) {
+        storyboard.lists = snapshot.docs.map(doc => {
+            let docData = doc.data();
+            docData.id = doc.id;
+            return docData;
+        });
+
+        ListsService.setLists(storyboard.lists);
+
+        //console.log(storyboard.lists);
+
+        //storyboard.lastOrderIndex = defineLastOrderIndex();
+        $rootScope.$apply();
     }
 
     function getStories() {
@@ -68,14 +109,15 @@ function StoryboardController($rootScope,
             return docData;
         });
 
+        StoriesService.setStories(storyboard.stories);
+
         //console.log(storyboard.stories);
 
         storyboard.lastOrderIndex = defineLastOrderIndex();
         $rootScope.$apply();
     }
 
-
-    function showStoryDialog(ev, action, column) {
+    function showStoryDialog(ev, action, listId) {
         $mdDialog.show({
             controller: StoryController,
             template: StoryTemplate,
@@ -86,8 +128,28 @@ function StoryboardController($rootScope,
             locals: {
                 data: storyboard.editedStory,
                 action: action, // create or edit
-                column: column, // status
+                listId: listId, // status
                 lastOrderIndex: storyboard.lastOrderIndex || 0
+            }
+        })
+            .then(response => {
+
+            })
+            .catch(e => console.log(e.message));
+    }
+
+    function showListDialog(ev, action) {
+        $mdDialog.show({
+            controller: ListController,
+            template: ListTemplate,
+            parent: angular.element(document.body),
+            targetEvent: ev,
+            clickOutsideToClose: true,
+            fullscreen: true,
+            locals: {
+                data: storyboard.editedList,
+                action: action, // create or edit
+                //lastOrderIndex: storyboard.lastOrderIndex || 0
             }
         })
             .then(response => {
@@ -104,6 +166,24 @@ function StoryboardController($rootScope,
         });
         return lastOrderIndex;
     }
+
+    /* EVENT LISTENERS & WATCHERS */
+    /*$rootScope.$watch('lists', () => {
+        $rootScope.$apply();
+    });*/
+    /*document.addEventListener('storyboard.lists', () => {
+        console.log(111);
+    });*/
+
+    $rootScope.$on('create_list', () => {
+        setCurrentList(null);
+        showListDialog(null, 'create');
+    });
+
+    $rootScope.$on('create_story', () => {
+        setCurrentStory(null);
+        showStoryDialog(null, 'create', 1);
+    });
 
     /*$rootScope.$on('storiesUpdated', (snapshot) => {
         console.log(snapshot);

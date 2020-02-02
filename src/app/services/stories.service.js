@@ -2,14 +2,18 @@
 class StoriesService {
 
     constructor() {
+        this.stories = [];
+    }
 
+    setStories(stories) {
+        this.stories = stories;
     }
 
     fetchStoriesByUserId(userUID) {
         return firebase.firestore()
             .collection('stories')
             .where('userUID', '==', userUID)
-            .orderBy('order');
+            //.orderBy('order');
     }
 
     addStory(story) {

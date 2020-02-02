@@ -1,21 +1,21 @@
-StoryController.$inject = ['$rootScope', '$scope', '$location', '$mdDialog', 'StoriesService', 'STORY_STATUSES', 'STORY_TYPES', 'data', 'action', 'column', 'lastOrderIndex'];
+StoryController.$inject = ['$rootScope', '$scope', '$location', '$mdDialog', 'StoriesService', 'ListsService', 'STORY_TYPES', 'data', 'action', 'listId', 'lastOrderIndex'];
 
 function StoryController($rootScope,
                          $scope,
                          $location,
                          $mdDialog,
                          StoriesService,
-                         STORY_STATUSES,
+                         ListsService,
                          STORY_TYPES,
                          data,
                          action,
-                         column,
+                         listId,
                          lastOrderIndex) {
 
     $scope.storyData = angular.copy(data);
     $scope.action = action;
-    $scope.column = column;
-    $scope.statuses = STORY_STATUSES;
+    $scope.listId = listId;
+    $scope.statuses = ListsService.lists;
     $scope.types = STORY_TYPES;
 
     $scope.closeDialog = closeDialog;
@@ -32,8 +32,8 @@ function StoryController($rootScope,
     }
 
     function defineActionLabel() {
-        if (action === 'edit') $scope.actionLabel = 'Edit story';
-        else $scope.actionLabel = 'Create story';
+        if (action === 'edit') $scope.actionLabel = 'Edit Story';
+        else $scope.actionLabel = 'Create Story';
     }
 
     function defineSubmitAction() {
@@ -48,15 +48,15 @@ function StoryController($rootScope,
             $scope.storyData.userUID = userUID;
         } else {
             $scope.storyData = {
-                status: STORY_STATUSES[0].value,
+                listId: ListsService.lists[0].id,
                 type: STORY_TYPES[0].value,
                 order: lastOrderIndex + 1,
                 userUID: userUID
             }
         }
 
-        if ($scope.storyData && column) {
-            $scope.storyData.status = column;
+        if ($scope.storyData && listId) {
+            $scope.storyData.listId = listId;
         }
     }
 
