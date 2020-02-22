@@ -1,4 +1,4 @@
-ListController.$inject = ['$rootScope', '$scope', '$location', '$mdDialog', 'ListsService', 'data', 'action'];
+ListController.$inject = ['$rootScope', '$scope', '$location', '$mdDialog', 'ListsService', 'data', 'action', 'storiesInList'];
 
 function ListController($rootScope,
                         $scope,
@@ -6,10 +6,18 @@ function ListController($rootScope,
                         $mdDialog,
                         ListsService,
                         data,
-                        action) {
+                        action,
+                        storiesInList) {
 
     $scope.listData = angular.copy(data);
     $scope.action = action;
+    $scope.lists = ListsService.lists.filter(list => list.id !== $scope.listData.id);
+    $scope.storiesInList = angular.copy(storiesInList);
+
+    $scope.settings = {
+        deleteAllStoriesInList: action === 'delete',
+        targetListId: $scope.lists.length ? $scope.lists[0].id : null
+    };
 
     $scope.closeDialog = closeDialog;
     $scope.deleteList = deleteList;
@@ -25,13 +33,19 @@ function ListController($rootScope,
     }
 
     function defineActionLabel() {
-        if (action === 'edit') $scope.actionLabel = 'Edit List';
-        else $scope.actionLabel = 'Create List';
+        switch (action) {
+            case 'edit': $scope.actionLabel = 'Edit List'; break;
+            case 'delete': $scope.actionLabel = 'Delete List'; break;
+            default: $scope.actionLabel = 'Create List';
+        }
     }
 
     function defineSubmitAction() {
-        if (action === 'edit') $scope.submitAction = editList;
-        else $scope.submitAction = createList;
+        switch (action) {
+            case 'edit': $scope.submitAction = editList; break;
+            case 'delete': $scope.submitAction = deleteList; break;
+            default: $scope.submitAction = createList;
+        }
     }
 
     function setDefaultListData() {
@@ -41,7 +55,7 @@ function ListController($rootScope,
             $scope.listData.userUID = userUID;
         } else {
             $scope.listData = {
-                userUID: userUID
+                userUID: userUID,
             }
         }
     }
@@ -64,8 +78,10 @@ function ListController($rootScope,
     }
 
     function deleteList() {
-        ListsService.deleteList($scope.listData.id)
-            .then(response => {
+        if ($scope.settings.deleteAllStoriesInList) $scope.settings.targetListId = null;
+
+        ListsService.deleteList($scope.listData.id, $scope.settings.targetListId)
+            .then(() => {
                 closeDialog();
             })
             .catch(e => console.log(e.message));

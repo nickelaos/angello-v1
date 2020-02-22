@@ -12,26 +12,46 @@
 
         <md-dialog-content>
             <div class="md-dialog-content">
-                <md-input-container class="md-block" flex-gt-sm>
-                    <label>Title</label>
-                    <input ng-model="listData.title" required>
+                <md-input-container class="md-block" layout="row" flex-gt-sm style="margin-bottom: 0;">
+                    <label for="md-list-title">Title</label>
+                    <input ng-model="listData.title"
+                           ng-readonly="action === 'delete'"
+                           id="md-list-title"
+                           required>
+                </md-input-container>
+                <md-checkbox class="md-block"
+                             layout="row"
+                             ng-if="action === 'delete' && storiesInList.length"
+                             ng-model="settings.deleteAllStoriesInList"
+                             ng-readonly="!lists.length"
+                             style="margin-bottom: 50px;"
+                >
+                    <span>Delete also all stories in this list</span>
+                </md-checkbox>
+                <md-input-container layout="row"
+                                    class="md-block"
+                                    ng-if="action === 'delete' && !settings.deleteAllStoriesInList && lists.length"
+                >
+                    <label>Move remaining stories to the list:</label>
+                    <md-select ng-model="settings.targetListId">
+                        <md-option ng-repeat="list in lists track by $index"
+                                   ng-value="list.id">
+                            {{ list.title }}
+                        </md-option>
+                    </md-select>
                 </md-input-container>
             </div>
         </md-dialog-content>
 
         <md-dialog-actions>
-            <div flex="30" layout="row" layout-align="start">
-                <md-button class="md-warn md-raised"
-                           ng-click="deleteList()"
-                           ng-if="action === 'edit'">
-                    DELETE
-                </md-button>
-            </div>
             <div flex="70" layout="row" layout-align="end">
                 <md-button ng-click="closeDialog()" aria-label="Close Dialog">
                     CANCEL
                 </md-button>
-                <md-button type="submit" class="md-primary-green md-raised" aria-label="Save">
+                <md-button type="submit"
+                           ng-class="{'md-warn': action === 'delete', 'md-primary-green': action !== 'delete'}"
+                           class="md-raised"
+                           aria-label="Save">
                     {{ action.toUpperCase() }}
                 </md-button>
             </div>

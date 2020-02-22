@@ -43,15 +43,17 @@ body {
     }
 }
 
+md-checkbox.md-checked .md-ink-ripple {
+    color: $darkGreen !important;
+
+    .md-icon {
+        background-color: $darkGreen !important;
+    }
+}
+
 /*Toolbar menu*/
 .md-menu {
     margin: 0 !important;
-}
-
-.md-open-menu-container {
-    right: 140px !important;
-    left: auto !important;
-    top: 70px !important;
 }
 
 

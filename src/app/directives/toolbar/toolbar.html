@@ -6,7 +6,7 @@
             </div>
             <div class="menu" flex="70" layout="row" layout-align="end">
 
-                <md-menu>
+                <md-menu md-position-mode="target-right bottom" md-offset="0 8">
                     <md-button class="md-fab md-mini md-primary-red md-hue-2"
                                aria-label="Add Item"
                                ng-click="$mdMenu.open()"
@@ -15,7 +15,7 @@
                     </md-button>
                     <md-menu-content width="3">
                         <md-menu-item ng-repeat="item in toolbar.menuItems">
-                            <md-button ng-click="toolbar.emitAction(item.value)">
+                            <md-button ng-click="$emit(item.value)">
                                 {{item.title}}
                             </md-button>
                         </md-menu-item>

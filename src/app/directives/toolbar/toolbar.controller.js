@@ -3,7 +3,6 @@ ToolbarController.$inject = ['$rootScope', '$location'];
 function ToolbarController($rootScope, $location) {
 
     const toolbar = this;
-    toolbar.emitAction = emitAction;
     toolbar.logout = logout;
 
     toolbar.menuItems = [
@@ -20,10 +19,6 @@ function ToolbarController($rootScope, $location) {
             value: 'create_type'
         }
     ];
-
-    function emitAction(value) {
-        $rootScope.$emit(value);
-    }
 
     function logout() {
         $rootScope.AuthService.signOut().then(() => {

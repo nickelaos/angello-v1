@@ -3,13 +3,34 @@
     <md-content id="storyboard">
         <div class="list-wrapper"
              ng-cloak
-             ng-if="storyboard.lists.length && storyboard.stories.length">
+             ng-if="storyboard.lists.length">
             <ul class="list"
                 ng-if="storyboard.lists.length"
                 ng-repeat="list in storyboard.lists"
             >
-                <h3 class="list-title">{{list.title}}</h3>
-                <hr>
+                <div class="list-title">
+                    <h3>{{list.title}}</h3>
+                    <md-menu md-position-mode="target-right bottom" md-offset="0 8">
+                        <md-button class="md-icon-button"
+                                   aria-label="Edit List"
+                                   ng-click="$mdMenu.open()"
+                        >
+                            <i class="fa fa-ellipsis-v"></i>
+                        </md-button>
+                        <md-menu-content width="2">
+                            <md-menu-item>
+                                <md-button ng-click="storyboard.setCurrentList(list); $emit('edit_list')">
+                                    Edit List
+                                </md-button>
+                            </md-menu-item>
+                            <md-menu-item>
+                                <md-button ng-click="storyboard.setCurrentList(list); $emit('delete_list')">
+                                    Delete List
+                                </md-button>
+                            </md-menu-item>
+                        </md-menu-content>
+                    </md-menu>
+                </div>
 
                 <li class="story list-drop-zone">
                     <div class="drop-zone"

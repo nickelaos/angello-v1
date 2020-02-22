@@ -19,7 +19,7 @@ function StoryboardController($rootScope,
     const storyboard = this;
 
     storyboard.currentListId = null;
-    storyboard.currentList = null;
+    storyboard.currentList = {};
     storyboard.editedList = {};
 
     storyboard.currentStoryId = null;
@@ -147,15 +147,16 @@ function StoryboardController($rootScope,
             clickOutsideToClose: true,
             fullscreen: true,
             locals: {
-                data: storyboard.editedList,
-                action: action, // create or edit
+                data: storyboard.editedList || {},
+                action: action, // create or edit or delete
+                storiesInList: action !== 'create' ? storyboard.stories.filter(story => story.listId === storyboard.editedList.id).map(story => story.id) : [],
                 //lastOrderIndex: storyboard.lastOrderIndex || 0
             }
         })
-            .then(response => {
+        .then(response => {
 
-            })
-            .catch(e => console.log(e.message));
+        })
+        .catch(e => console.log(e.message));
     }
 
     function defineLastOrderIndex() {
@@ -180,6 +181,14 @@ function StoryboardController($rootScope,
         showListDialog(null, 'create');
     });
 
+    $rootScope.$on('edit_list', (e) => {
+        showListDialog(e, 'edit');
+    });
+
+    $rootScope.$on('delete_list', (e) => {
+        showListDialog(e, 'delete');
+    });
+
     $rootScope.$on('create_story', () => {
         setCurrentStory(null);
         showStoryDialog(null, 'create', 1);
@@ -189,6 +198,8 @@ function StoryboardController($rootScope,
         console.log(snapshot);
         setStories(snapshot)
     });*/
+
+    /******************************************************************************************/
 
     /* DRAG & DROP*/
     function insertAfter(newNode, referenceNode) {

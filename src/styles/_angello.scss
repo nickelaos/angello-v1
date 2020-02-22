@@ -47,6 +47,30 @@ body.loading .modal {
     width: 300px;
 }
 
+.list-title {
+    border-bottom: 3px solid green;
+    min-height: 50px;
+    margin-bottom: 15px;
+
+    h3 {
+        display: inline-block;
+        float: left;
+    }
+
+    button {
+        float: right;
+        width: 10px !important;
+        height: 42px !important;
+        padding: 0 !important;
+        margin: 0 !important;
+
+        i {
+            font-size: 20px;
+        }
+    }
+
+}
+
 hr {
     margin-bottom: 15px;
     margin-top: 15px;
