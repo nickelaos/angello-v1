@@ -61,6 +61,8 @@ function StoryController($rootScope,
     }
 
     function createStory() {
+        $scope.storyData.order = defineMaxStoryIndexWithinList();
+        $scope.storyData.createdAt = Date.now();
         StoriesService.addStory($scope.storyData)
             .then(response => {
                 closeDialog();
@@ -83,6 +85,14 @@ function StoryController($rootScope,
                 closeDialog();
             })
             .catch(e => console.log(e.message));
+    }
+
+    function defineMaxStoryIndexWithinList() {
+        let maxOrderIndex = 1000;
+        const storiesInList = StoriesService.stories.filter(story => story.listId === $scope.storyData.listId).map(story => story.order);
+        if (!storiesInList.length) return maxOrderIndex;
+        maxOrderIndex = Math.max(...storiesInList) + 1000;
+        return maxOrderIndex;
     }
 
     function resetForm() {

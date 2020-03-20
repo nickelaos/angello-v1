@@ -113,7 +113,7 @@ function StoryboardController($rootScope,
 
         //console.log(storyboard.stories);
 
-        storyboard.lastOrderIndex = defineLastOrderIndex();
+        //storyboard.lastOrderIndex = defineLastOrderIndex();
         $rootScope.$apply();
     }
 
@@ -159,14 +159,14 @@ function StoryboardController($rootScope,
         .catch(e => console.log(e.message));
     }
 
-    function defineLastOrderIndex() {
+    /*function defineLastOrderIndex() {
         let lastOrderIndex = 0;
         storyboard.stories.forEach(story => {
             if (story.order > lastOrderIndex)
                 lastOrderIndex = story.order;
         });
         return lastOrderIndex;
-    }
+    }*/
 
     /* EVENT LISTENERS & WATCHERS */
     /*$rootScope.$watch('lists', () => {
@@ -227,20 +227,21 @@ function StoryboardController($rootScope,
     }
 
     function drop(ev) {
-        console.log('drop', ev);
         ev.preventDefault();
 
         const draggableItemId = ev.dataTransfer.getData("id");
         const draggableEl = document.getElementById(draggableItemId);
 
         const targetEl = ev.target.closest('.story');
-        //const targetList = ev.target.closest('.list');
+        const targetList = ev.target.closest('.list');
 
         //targetList.insertBefore(draggableEl, targetEl);
         insertAfter(draggableEl, targetEl);
 
+        const newOrderIndex = defineOrderOfDroppedElement(targetEl.id, targetList.id);
+
         ev.dataTransfer.clearData();
-        dragEnd();
+        dragEnd(draggableItemId, newOrderIndex, targetList.id);
     }
 
     function hideDropZones() {
@@ -270,15 +271,45 @@ function StoryboardController($rootScope,
         hideDropZones();
     }
 
-    function dragEnd() {
+    function dragEnd(storyId, newOrderIndex, newListId) {
         /*const el = document.getElementById($scope.draggableItemId);
         el.classList.remove('dragging-story');*/
-
         hideDropZones();
 
         $scope.draggableItemId = null;
         $scope.draggableItemHeight = 0;
         $scope.targetItemId = null;
+
+        const story = StoriesService.stories.find(story => story.id === storyId);
+        story.order = newOrderIndex;
+        story.listId = newListId;
+
+        StoriesService.editStory(story)
+            .then(() => {
+                $rootScope.$apply();
+            })
+            .catch(e => console.log(e.message));
+
+    }
+
+    function defineOrderOfDroppedElement(targetStoryId, targetListId) {
+        const defaultOutput = 1000;
+
+        const storiesInList = StoriesService.stories.filter(story => story.listId === targetListId);
+        const orderNumbersInList = storiesInList.map(story => story.order);
+
+        if (!orderNumbersInList.length)
+            return defaultOutput;
+
+        const targetStoryOrder = storiesInList.find(story => story.id === targetStoryId).order;
+
+        let targetStoryIndex = orderNumbersInList.indexOf(targetStoryOrder);
+
+        const nextStoryOrder = storiesInList[targetStoryIndex + 1].order;
+
+        debugger
+
+        return (nextStoryOrder + targetStoryOrder) / 2;
     }
 
 }

@@ -6,7 +6,8 @@
              ng-if="storyboard.lists.length">
             <ul class="list"
                 ng-if="storyboard.lists.length"
-                ng-repeat="list in storyboard.lists"
+                ng-repeat="list in storyboard.lists | orderBy: list.order track by list.id"
+                ng-attr-id="{{ list.id }}"
             >
                 <div class="list-title">
                     <h3>{{list.title}}</h3>
@@ -42,7 +43,7 @@
                     </div>
                 </li>
 
-                <li ng-repeat="story in storyboard.stories | filter: { listId: list.id }"
+                <li ng-repeat="story in storyboard.stories | filter: { listId: list.id } | orderBy: story.order track by story.id"
                     ng-if="storyboard.stories.length"
                     ng-click="storyboard.setCurrentStory(story);
                               storyboard.showStoryDialog($event, 'edit')"
@@ -58,10 +59,6 @@
                 >
 
                     <div class="story-container"
-                         ondrop="angular.element(this).scope().drop(event)"
-                         ondragover="angular.element(this).scope().dragOver(event)"
-                         ondragleave="angular.element(this).scope().dragLeave(event)"
-                         ondragend="angular.element(this).scope().dragEnd()"
                     >
                         <story-summary data="story"></story-summary>
                     </div>

@@ -13,7 +13,7 @@ class StoriesService {
         return firebase.firestore()
             .collection('stories')
             .where('userUID', '==', userUID)
-            //.orderBy('order');
+            .orderBy('order');
     }
 
     addStory(story) {

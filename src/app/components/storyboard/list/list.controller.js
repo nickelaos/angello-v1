@@ -61,6 +61,11 @@ function ListController($rootScope,
     }
 
     function createList() {
+        const ordersArr = $scope.lists.map(list => list.order);
+        $scope.listData.order = ordersArr.length
+            ? Math.max(...ordersArr) + 1
+            : 1;
+        $scope.listData.createdAt = Date.now();
         ListsService.addList($scope.listData)
             .then(response => {
                 closeDialog();

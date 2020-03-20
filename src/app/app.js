@@ -15,10 +15,6 @@ import appConfig from './app.config';
 import appRun from './app.run';
 import AppController from './app.controller';
 
-import home from './components/home';
-import blog from './components/blog';
-import grids from './components/grids';
-import album from './components/album';
 import auth from './components/auth';
 import storyboard from './components/storyboard';
 
@@ -36,10 +32,6 @@ angular
         ngAnimate,
         collapse,
         uirouter,
-        home,
-        blog,
-        grids,
-        album,
         auth,
         storyboard,
         toolbar
