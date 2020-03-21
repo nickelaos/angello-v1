@@ -4,5 +4,93 @@
   background-image: url('images/bg-wood.jpg');
   background-repeat: no-repeat;
   background-size: cover;
+  position: relative;
+
+  .list {
+    position: absolute;
+    background: #f0f0f0;
+    border-radius: 5px 5px 3px 3px;
+    z-index: 1;
+    float: left;
+    margin: 25px 10px;
+    width: 300px;
+
+    .list-header {
+      min-height: 50px;
+      color: #fff;
+      background-color: #333;
+      cursor: move;
+      border-radius: 3px 3px 0 0;
+      padding: 0 10px;
+
+      h3 {
+        display: inline-block;
+        float: left;
+        line-height: 50px;
+        margin-bottom: 0 !important;
+      }
+
+      button {
+        float: right;
+        width: 10px !important;
+        height: 50px !important;
+        padding: 0 !important;
+        margin: 0 !important;
+
+        i {
+          font-size: 20px;
+        }
+      }
+
+    }
+
+    .list-content {
+      position: relative;
+      border: 10px solid transparent;
+    }
+
+    .list-footer {
+
+    }
+
+    &.muuri-item-releasing {
+      z-index: 2;
+    }
+
+    &.muuri-item-dragging {
+      z-index: 3;
+      cursor: move;
+    }
+    
+  }
+}
+
+/* Do not put inside .list */
+.list-item {
+  position: absolute;
+  width: 100%;
+  margin: 5px 0;
+
+  .list-item-content {
+    position: relative;
+    background: #fff;
+    border-radius: 4px;
+    cursor: pointer;
+    -webkit-box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.2);
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.2);
+  }
+
+  &.muuri-item-releasing {
+    z-index: 9998;
+  }
+
+  &.muuri-item-dragging {
+    z-index: 9999;
+    cursor: move;
+  }
+
+  &.muuri-item-hidden {
+    z-index: 0;
+  }
 
 }

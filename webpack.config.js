@@ -39,6 +39,10 @@ module.exports = {
                     loader: 'html-loader'
                 }
             },
+            {
+                test: /\.exec\.js$/,
+                use: [ 'script-loader' ]
+            }
         ]
     },
     plugins: [

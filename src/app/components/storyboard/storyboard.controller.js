@@ -4,6 +4,8 @@ import ListTemplate from './list/list.html';
 import StoryController from './story/story.controller';
 import StoryTemplate from './story/story.html';
 
+import initDND from '../../services/dnd.service.js'
+
 StoryboardController.$inject = ['$rootScope', '$scope', '$state', '$location', '$mdDialog', 'StoriesService', 'ListsService', 'STORY_TYPES'];
 export default StoryboardController;
 
@@ -35,11 +37,11 @@ function StoryboardController($rootScope,
     storyboard.setCurrentStory = setCurrentStory;
     storyboard.showStoryDialog = showStoryDialog;
 
-    $scope.drag = drag;
+    /*$scope.drag = drag;
     $scope.drop = drop;
     $scope.dragOver = dragOver;
     $scope.dragLeave = dragLeave;
-    $scope.dragEnd = dragEnd;
+    $scope.dragEnd = dragEnd;*/
 
     $scope.draggableItemId = null;
     $scope.draggableItemHeight = 0;
@@ -87,6 +89,8 @@ function StoryboardController($rootScope,
 
         ListsService.setLists(storyboard.lists);
 
+        setBodyWidth();
+
         //console.log(storyboard.lists);
 
         //storyboard.lastOrderIndex = defineLastOrderIndex();
@@ -99,6 +103,7 @@ function StoryboardController($rootScope,
         StoriesService.fetchStoriesByUserId(userUID)
             .onSnapshot(snapshot => {
                 setStories(snapshot);
+                initDND();
             }, err => console.log(err.message));
     }
 
@@ -159,6 +164,12 @@ function StoryboardController($rootScope,
         .catch(e => console.log(e.message));
     }
 
+    function setBodyWidth() {
+        if (window.innerWidth < storyboard.lists.length * 330) {
+            document.body.style.width = (storyboard.lists.length * 330) + 'px';
+        }
+    }
+
     /*function defineLastOrderIndex() {
         let lastOrderIndex = 0;
         storyboard.stories.forEach(story => {
@@ -202,7 +213,7 @@ function StoryboardController($rootScope,
     /******************************************************************************************/
 
     /* DRAG & DROP*/
-    function insertAfter(newNode, referenceNode) {
+    /*function insertAfter(newNode, referenceNode) {
         referenceNode.parentNode.insertBefore(newNode, referenceNode.nextSibling);
     }
 
@@ -210,13 +221,13 @@ function StoryboardController($rootScope,
         const draggableItemId = ev.target.closest('.story').id;
         const draggableItemHeight = String(ev.target.closest('.story').clientHeight);
 
-        /*const el = document.getElementById(draggableItemId);
+        /!*const el = document.getElementById(draggableItemId);
         const fakeGhost = el.cloneNode(true);
         fakeGhost.style.opacity = '100%';
         document.body.appendChild(fakeGhost);
-        ev.dataTransfer.setDragImage(fakeGhost, 0, 0);*/
-        /*const el = document.getElementById(draggableItemId);
-        el.classList.add('dragging-story');*/
+        ev.dataTransfer.setDragImage(fakeGhost, 0, 0);*!/
+        /!*const el = document.getElementById(draggableItemId);
+        el.classList.add('dragging-story');*!/
 
         ev.dataTransfer.setData('id', draggableItemId);
         ev.dataTransfer.dropEffect = 'move';
@@ -272,8 +283,8 @@ function StoryboardController($rootScope,
     }
 
     function dragEnd(storyId, newOrderIndex, newListId) {
-        /*const el = document.getElementById($scope.draggableItemId);
-        el.classList.remove('dragging-story');*/
+        /!*const el = document.getElementById($scope.draggableItemId);
+        el.classList.remove('dragging-story');*!/
         hideDropZones();
 
         $scope.draggableItemId = null;
@@ -307,9 +318,7 @@ function StoryboardController($rootScope,
 
         const nextStoryOrder = storiesInList[targetStoryIndex + 1].order;
 
-        debugger
-
         return (nextStoryOrder + targetStoryOrder) / 2;
-    }
+    }*/
 
 }

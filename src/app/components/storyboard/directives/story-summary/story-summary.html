@@ -3,7 +3,7 @@
         ×
     </button>
 </md-toolbar>-->
-<article>
+<article class="story-summary">
     <div>
         <p class="title">{{storySummary.data.title}}</p>
     </div>
@@ -12,3 +12,29 @@
         <p>{{storySummary.data.description}}</p>
     </div>-->
 </article>
+
+<style>
+    .story-summary {
+        color: #333;
+        height: auto;
+        max-height: 145px;
+        padding: 10px;
+        cursor: pointer;
+        overflow: auto;
+    }
+
+    .story-summary .title {
+        font-size: 18px;
+        color: #333;
+        margin-bottom: 0;
+    }
+
+    /*.story-summary:hover {
+        opacity: 0.9;
+    }*/
+
+    .story-summary .type-bar {
+        height: 5px;
+        width: 100%;
+    }
+</style>

@@ -69,6 +69,7 @@ function ListController($rootScope,
         ListsService.addList($scope.listData)
             .then(response => {
                 closeDialog();
+                window.location.reload(); // temp
             })
             .catch(e => console.log(e.message));
     }
@@ -88,6 +89,7 @@ function ListController($rootScope,
         ListsService.deleteList($scope.listData.id, $scope.settings.targetListId)
             .then(() => {
                 closeDialog();
+                window.location.reload(); // temp
             })
             .catch(e => console.log(e.message));
     }

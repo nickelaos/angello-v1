@@ -2,14 +2,22 @@
 @import "helpers";
 @import "bootstrap";
 @import "font-awesome";
-@import "dnd";
-@import "angello";
 
 /* General
 -------------------------------------------------- */
 .md-primary-green {
     background-color: $darkGreen !important;
     color: white !important;
+}
+
+.md-primary-dark {
+    background-color: $dark !important;
+    color: white !important;
+}
+
+.md-primary-light {
+    background-color: $light !important;
+    color: $dark !important;
 }
 
 .md-primary-red {
@@ -22,7 +30,7 @@
 }
 
 html {
-    overflow-y: scroll;
+    overflow: auto;
 }
 
 body {
@@ -30,7 +38,6 @@ body {
 
     .main {
         height: 100%;
-        overflow: auto;
 
         md-content {
             color: white;
@@ -51,46 +58,12 @@ md-checkbox.md-checked .md-ink-ripple {
     }
 }
 
-/*Toolbar menu*/
+/* Toolbar menu */
 .md-menu {
     margin: 0 !important;
 }
 
-
-/* Fixed Navbar
--------------------------------------------------- */
-.fixed-top {
-    //min-height: 4.1rem;
+.md-toolbar-tools {
+    position: fixed;
+    background-color: $darkGreen;
 }
-
-
-/* Sticky footer
--------------------------------------------------- */
-/*
-$footer-height: 3.5rem;
-
-html {
-    position: relative;
-    min-height: 100%;
-}
-
-body {
-    margin-bottom: (2*$footer-height);
-}
-
-.footer {
-    position: absolute;
-    bottom: 0;
-    width: 100%;
-    height: $footer-height;
-    line-height: $footer-height; !* Vertically center the text there *!
-    background-color: $gray-200;
-
-    p {
-        margin: 0;
-    }
-
-    .to-top {
-        font-size: $small-font-size;
-    }
-}*/

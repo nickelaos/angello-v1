@@ -1,87 +1,63 @@
 <div>
     <toolbar></toolbar>
-    <md-content id="storyboard">
-        <div class="list-wrapper"
-             ng-cloak
-             ng-if="storyboard.lists.length">
-            <ul class="list"
-                ng-if="storyboard.lists.length"
-                ng-repeat="list in storyboard.lists | orderBy: list.order track by list.id"
-                ng-attr-id="{{ list.id }}"
-            >
-                <div class="list-title">
-                    <h3>{{list.title}}</h3>
-                    <md-menu md-position-mode="target-right bottom" md-offset="0 8">
-                        <md-button class="md-icon-button"
-                                   aria-label="Edit List"
-                                   ng-click="$mdMenu.open()"
-                        >
-                            <i class="fa fa-ellipsis-v"></i>
-                        </md-button>
-                        <md-menu-content width="2">
-                            <md-menu-item>
-                                <md-button ng-click="storyboard.setCurrentList(list); $emit('edit_list')">
-                                    Edit List
-                                </md-button>
-                            </md-menu-item>
-                            <md-menu-item>
-                                <md-button ng-click="storyboard.setCurrentList(list); $emit('delete_list')">
-                                    Delete List
-                                </md-button>
-                            </md-menu-item>
-                        </md-menu-content>
-                    </md-menu>
-                </div>
-
-                <li class="story list-drop-zone">
-                    <div class="drop-zone"
-                         ondrop="angular.element(this).scope().drop(event)"
-                         ondragover="angular.element(this).scope().dragOver(event)"
-                         ondragleave="angular.element(this).scope().dragLeave(event)"
-                         ondragend="angular.element(this).scope().dragEnd()"
+    <div id="storyboard" ng-cloak>
+        <div class="list"
+             ng-if="storyboard.lists.length"
+             ng-repeat="list in storyboard.lists | orderBy: list.order track by list.id"
+             ng-attr-id="{{ list.id }}">
+            <div class="list-header">
+                <h3>{{list.title}}</h3>
+                <md-menu md-position-mode="target-right bottom" md-offset="0 8">
+                    <md-button class="md-icon-button"
+                               aria-label="Edit List"
+                               ng-click="$mdMenu.open()"
                     >
-                    </div>
-                </li>
-
-                <li ng-repeat="story in storyboard.stories | filter: { listId: list.id } | orderBy: story.order track by story.id"
-                    ng-if="storyboard.stories.length"
-                    ng-click="storyboard.setCurrentStory(story);
-                              storyboard.showStoryDialog($event, 'edit')"
-                    ng-attr-id="{{ story.id }}"
-                    class="story"
-                    draggable="true"
-
-                    ondragstart="angular.element(this).scope().drag(event)"
-                    ondrop="angular.element(this).scope().drop(event)"
-                    ondragover="angular.element(this).scope().dragOver(event)"
-                    ondragleave="angular.element(this).scope().dragLeave(event)"
-                    ondragend="angular.element(this).scope().dragEnd()"
+                        <i class="fa fa-ellipsis-v"></i>
+                    </md-button>
+                    <md-menu-content width="2">
+                        <md-menu-item>
+                            <md-button ng-click="storyboard.setCurrentList(list); $emit('edit_list')">
+                                Edit List
+                            </md-button>
+                        </md-menu-item>
+                        <md-menu-item>
+                            <md-button ng-click="storyboard.setCurrentList(list); $emit('delete_list')">
+                                Delete List
+                            </md-button>
+                        </md-menu-item>
+                    </md-menu-content>
+                </md-menu>
+            </div>
+            <div class="list-content">
+                <div ng-repeat="story in storyboard.stories | filter: { listId: list.id } | orderBy: story.order track by story.id"
+                     ng-if="storyboard.stories.length"
+                     ng-click="storyboard.setCurrentStory(story); storyboard.showStoryDialog($event, 'edit')"
+                     ng-attr-id="{{ story.id }}"
+                     class="list-item"
                 >
-
-                    <div class="story-container"
-                    >
+                    <div class="list-item-content">
                         <story-summary data="story"></story-summary>
                     </div>
-
-                    <div class="drop-zone"
-                         ondrop="angular.element(this).scope().drop(event)"
-                         ondragover="angular.element(this).scope().dragOver(event)"
-                         ondragleave="angular.element(this).scope().dragLeave(event)"
-                         ondragend="angular.element(this).scope().dragEnd()"
-                    >
-                    </div>
-
-                </li>
-
-                <li class="mt-2 add-story-container">
-                    <md-button class="md-fab md-mini md-primary-green md-hue-2"
-                               aria-label="Add story"
-                               ng-click="storyboard.setCurrentStory(null);
+                </div>
+            </div>
+            <div class="list-footer">
+                <md-button class="md-fab md-mini md-primary-dark md-hue-2"
+                           aria-label="Add a story"
+                           ng-click="storyboard.setCurrentStory(null);
                                          storyboard.showStoryDialog($event, 'create', list.id)">
-                        <i class="fa fa-plus"></i>
-                    </md-button>
-                </li>
-            </ul>
+                    <i class="fa fa-plus"></i>
+                </md-button>
+            </div>
         </div>
-    </md-content>
+    </div>
 </div>
+
+<!--<li class="story list-drop-zone">
+    <div class="drop-zone"
+         ondrop="angular.element(this).scope().drop(event)"
+         ondragover="angular.element(this).scope().dragOver(event)"
+         ondragleave="angular.element(this).scope().dragLeave(event)"
+         ondragend="angular.element(this).scope().dragEnd()"
+    >
+    </div>
+</li>-->
