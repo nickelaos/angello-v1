@@ -22,6 +22,7 @@ import toolbar from './directives/toolbar/toolbar.directive';
 
 import StoriesService from './services/stories.service';
 import ListsService from './services/lists.service';
+import DNDService from './services/dnd.service.js';
 import STORY_TYPES from './services/storyTypes.service'; // temp
 
 angular
@@ -41,4 +42,5 @@ angular
     .controller('AppController', AppController)
     .service('StoriesService', StoriesService)
     .service('ListsService', ListsService)
+    .service('DNDService', DNDService)
     .value('STORY_TYPES', STORY_TYPES);

@@ -33,6 +33,7 @@
                      ng-if="storyboard.stories.length"
                      ng-click="storyboard.setCurrentStory(story); storyboard.showStoryDialog($event, 'edit')"
                      ng-attr-id="{{ story.id }}"
+                     ng-attr-order="{{ story.order }}"
                      class="list-item"
                 >
                     <div class="list-item-content">

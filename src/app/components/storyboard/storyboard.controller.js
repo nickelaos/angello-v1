@@ -4,9 +4,7 @@ import ListTemplate from './list/list.html';
 import StoryController from './story/story.controller';
 import StoryTemplate from './story/story.html';
 
-import initDND from '../../services/dnd.service.js'
-
-StoryboardController.$inject = ['$rootScope', '$scope', '$state', '$location', '$mdDialog', 'StoriesService', 'ListsService', 'STORY_TYPES'];
+StoryboardController.$inject = ['$rootScope', '$scope', '$state', '$location', '$mdDialog', 'StoriesService', 'ListsService', 'DNDService', 'STORY_TYPES'];
 export default StoryboardController;
 
 function StoryboardController($rootScope,
@@ -16,6 +14,7 @@ function StoryboardController($rootScope,
                               $mdDialog,
                               StoriesService,
                               ListsService,
+                              DNDService,
                               STORY_TYPES) {
 
     const storyboard = this;
@@ -37,18 +36,11 @@ function StoryboardController($rootScope,
     storyboard.setCurrentStory = setCurrentStory;
     storyboard.showStoryDialog = showStoryDialog;
 
-    /*$scope.drag = drag;
-    $scope.drop = drop;
-    $scope.dragOver = dragOver;
-    $scope.dragLeave = dragLeave;
-    $scope.dragEnd = dragEnd;*/
-
-    $scope.draggableItemId = null;
-    $scope.draggableItemHeight = 0;
-    $scope.targetItemId = null;
-
-    /*window.$rootScope = $rootScope; // temp
-    window.$scope = $scope; // temp*/
+    window.$rootScope = $rootScope; // temp
+    window.$scope = $scope; // temp
+    window.stories = storyboard.stories; // temp
+    window.DNDService = DNDService; // temp
+    window.StoriesService = StoriesService; // temp
 
     init();
 
@@ -91,8 +83,6 @@ function StoryboardController($rootScope,
 
         setBodyWidth();
 
-        //console.log(storyboard.lists);
-
         //storyboard.lastOrderIndex = defineLastOrderIndex();
         $rootScope.$apply();
     }
@@ -103,7 +93,22 @@ function StoryboardController($rootScope,
         StoriesService.fetchStoriesByUserId(userUID)
             .onSnapshot(snapshot => {
                 setStories(snapshot);
-                initDND();
+
+                if ((DNDService.originListId !== DNDService.targetListId) && DNDService.originListId) {
+                    DNDService.columnGrids && DNDService.columnGrids.forEach(grid => {
+                        DNDService.deleteDraggedElement(grid);
+                    });
+                    DNDService.originListId = null;
+                    DNDService.targetListId = null;
+                }
+
+                if (!$rootScope.DNDinited) {
+                    DNDService.init(StoriesService);
+                    $rootScope.DNDinited = true;
+                }
+
+                $rootScope.$apply();
+
             }, err => console.log(err.message));
     }
 
@@ -115,8 +120,6 @@ function StoryboardController($rootScope,
         });
 
         StoriesService.setStories(storyboard.stories);
-
-        //console.log(storyboard.stories);
 
         //storyboard.lastOrderIndex = defineLastOrderIndex();
         $rootScope.$apply();
@@ -170,6 +173,22 @@ function StoryboardController($rootScope,
         }
     }
 
+    function resetStoryboard() {
+        storyboard.currentListId = null;
+        storyboard.currentList = {};
+        storyboard.editedList = {};
+
+        storyboard.currentStoryId = null;
+        storyboard.currentStory = null;
+        storyboard.editedStory = {};
+
+        storyboard.stories = [];
+        storyboard.types = STORY_TYPES;
+        storyboard.lists = [];
+
+        $rootScope.DNDinited = false;
+    }
+
     /*function defineLastOrderIndex() {
         let lastOrderIndex = 0;
         storyboard.stories.forEach(story => {
@@ -205,120 +224,9 @@ function StoryboardController($rootScope,
         showStoryDialog(null, 'create', 1);
     });
 
-    /*$rootScope.$on('storiesUpdated', (snapshot) => {
-        console.log(snapshot);
-        setStories(snapshot)
-    });*/
-
-    /******************************************************************************************/
-
-    /* DRAG & DROP*/
-    /*function insertAfter(newNode, referenceNode) {
-        referenceNode.parentNode.insertBefore(newNode, referenceNode.nextSibling);
-    }
-
-    function drag(ev) {
-        const draggableItemId = ev.target.closest('.story').id;
-        const draggableItemHeight = String(ev.target.closest('.story').clientHeight);
-
-        /!*const el = document.getElementById(draggableItemId);
-        const fakeGhost = el.cloneNode(true);
-        fakeGhost.style.opacity = '100%';
-        document.body.appendChild(fakeGhost);
-        ev.dataTransfer.setDragImage(fakeGhost, 0, 0);*!/
-        /!*const el = document.getElementById(draggableItemId);
-        el.classList.add('dragging-story');*!/
-
-        ev.dataTransfer.setData('id', draggableItemId);
-        ev.dataTransfer.dropEffect = 'move';
-        ev.dataTransfer.effectAllowed = 'move';
-
-        $scope.draggableItemId = draggableItemId;
-        $scope.draggableItemHeight = draggableItemHeight;
-    }
-
-    function drop(ev) {
-        ev.preventDefault();
-
-        const draggableItemId = ev.dataTransfer.getData("id");
-        const draggableEl = document.getElementById(draggableItemId);
-
-        const targetEl = ev.target.closest('.story');
-        const targetList = ev.target.closest('.list');
-
-        //targetList.insertBefore(draggableEl, targetEl);
-        insertAfter(draggableEl, targetEl);
-
-        const newOrderIndex = defineOrderOfDroppedElement(targetEl.id, targetList.id);
-
-        ev.dataTransfer.clearData();
-        dragEnd(draggableItemId, newOrderIndex, targetList.id);
-    }
-
-    function hideDropZones() {
-        const dropZones = document.getElementsByClassName('drop-zone');
-        if (!dropZones) return;
-        for (let i = 0; i < dropZones.length; i++) {
-            dropZones[i].style.height = '5px';
-            dropZones[i].style.opacity = '0';
-        }
-    }
-
-    function dragOver(ev) {
-        ev.preventDefault();
-
-        const targetEl = ev.target.closest('.story');
-        if ($scope.draggableItemId === targetEl.id) return;
-
-        let targetZone = ev.target.closest('.drop-zone') || targetEl.querySelector('.drop-zone');
-        if (!targetZone || !targetEl) return;
-
-        targetZone.style.height = $scope.draggableItemHeight + 'px';
-        targetZone.style.opacity = '100%';
-    }
-
-    function dragLeave(ev) {
-        ev.preventDefault();
-        hideDropZones();
-    }
-
-    function dragEnd(storyId, newOrderIndex, newListId) {
-        /!*const el = document.getElementById($scope.draggableItemId);
-        el.classList.remove('dragging-story');*!/
-        hideDropZones();
-
-        $scope.draggableItemId = null;
-        $scope.draggableItemHeight = 0;
-        $scope.targetItemId = null;
-
-        const story = StoriesService.stories.find(story => story.id === storyId);
-        story.order = newOrderIndex;
-        story.listId = newListId;
-
-        StoriesService.editStory(story)
-            .then(() => {
-                $rootScope.$apply();
-            })
-            .catch(e => console.log(e.message));
-
-    }
-
-    function defineOrderOfDroppedElement(targetStoryId, targetListId) {
-        const defaultOutput = 1000;
-
-        const storiesInList = StoriesService.stories.filter(story => story.listId === targetListId);
-        const orderNumbersInList = storiesInList.map(story => story.order);
-
-        if (!orderNumbersInList.length)
-            return defaultOutput;
-
-        const targetStoryOrder = storiesInList.find(story => story.id === targetStoryId).order;
-
-        let targetStoryIndex = orderNumbersInList.indexOf(targetStoryOrder);
-
-        const nextStoryOrder = storiesInList[targetStoryIndex + 1].order;
-
-        return (nextStoryOrder + targetStoryOrder) / 2;
-    }*/
+    $rootScope.$on('refreshStoryboard', () => {
+        resetStoryboard();
+        init();
+    });
 
 }

@@ -24,7 +24,7 @@ class StoriesService {
 
     editStory(story) {
         const id = story.id;
-        delete story.id;
+        //delete story.id;
         return firebase.firestore()
             .collection('stories')
             .doc(id)

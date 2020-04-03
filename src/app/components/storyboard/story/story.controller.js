@@ -1,4 +1,4 @@
-StoryController.$inject = ['$rootScope', '$scope', '$location', '$mdDialog', 'StoriesService', 'ListsService', 'STORY_TYPES', 'data', 'action', 'listId', 'lastOrderIndex'];
+StoryController.$inject = ['$rootScope', '$scope', '$location', '$mdDialog', 'StoriesService', 'ListsService', 'STORY_TYPES', 'data', 'action', 'listId', 'lastOrderIndex', 'DNDService'];
 
 function StoryController($rootScope,
                          $scope,
@@ -10,7 +10,8 @@ function StoryController($rootScope,
                          data,
                          action,
                          listId,
-                         lastOrderIndex) {
+                         lastOrderIndex,
+                         DNDService) {
 
     $scope.storyData = angular.copy(data);
     $scope.action = action;
@@ -63,9 +64,11 @@ function StoryController($rootScope,
     function createStory() {
         $scope.storyData.order = defineMaxStoryIndexWithinList();
         $scope.storyData.createdAt = Date.now();
+        //$rootScope.storyCreated = true;
         StoriesService.addStory($scope.storyData)
             .then(response => {
                 closeDialog();
+                $rootScope.$emit('refreshStoryboard');
             })
             .catch(e => console.log(e.message));
     }
@@ -75,6 +78,7 @@ function StoryController($rootScope,
         StoriesService.editStory(editedData)
             .then(response => {
                 closeDialog();
+                $rootScope.$emit('refreshStoryboard');
             })
             .catch(e => console.log(e.message));
     }
@@ -83,6 +87,7 @@ function StoryController($rootScope,
         StoriesService.deleteStory($scope.storyData.id)
             .then(response => {
                 closeDialog();
+                $rootScope.$emit('refreshStoryboard');
             })
             .catch(e => console.log(e.message));
     }
