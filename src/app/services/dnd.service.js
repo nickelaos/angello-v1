@@ -114,6 +114,47 @@ export default class DNDService {
         // Instantiate the board grid so we can drag those
         // columns around.
         boardGrid = new Muuri('#storyboard', {
+
+            layout: function (items, gridWidth, gridHeight) {
+                // The layout data object. Muuri will read this data and position the items
+                // based on it.
+                var layout = {
+                    // The layout's item slots (left/top coordinates).
+                    slots: [],
+                    // The layout's total width.
+                    width: 0,
+                    // The layout's total height.
+                    height: 0,
+                    // Should Muuri set the grid's width after layout?
+                    setWidth: true,
+                    // Should Muuri set the grid's height after layout?
+                    setHeight: true,
+                };
+
+                // Calculate the slots.
+                var item;
+                var m;
+                var x = 0;
+                var y = 0;
+                var w = 0;
+                var h = 0;
+                for (var i = 0; i < items.length; i++) {
+                    item = items[i];
+                    x += w;
+                    //y += h;
+                    m = item.getMargin();
+                    w = item.getWidth() + m.left + m.right;
+                    h = item.getHeight() + m.top + m.bottom;
+                    layout.slots.push(x, 0);
+                }
+
+                // Calculate the layout's total width and height.
+                layout.width = x + w;
+                layout.height = y + h;
+
+                return layout;
+            },
+
             layoutDuration: 400,
             layoutEasing: 'ease',
             dragEnabled: true,
@@ -151,7 +192,6 @@ export default class DNDService {
 
             const newOrderIndex = self.defineOrderOfDroppedElement(draggableListId, draggableListOrder, prevSiblingOrder, nextSiblingOrder);
 
-            self.grid = grid; //
             self.draggableListId = draggableListId;
 
             if (newOrderIndex === draggableListOrder) return;

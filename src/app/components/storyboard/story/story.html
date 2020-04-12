@@ -9,7 +9,6 @@
                 </md-button>
             </div>
         </md-toolbar>
-
         <md-dialog-content>
             <div class="md-dialog-content">
                 <md-input-container class="md-block" flex-gt-sm>
@@ -25,7 +24,7 @@
                     <md-input-container flex="50">
                         <label>Status</label>
                         <md-select ng-model="storyData.listId">
-                            <md-option ng-repeat="status in statuses" ng-value="status.id">
+                            <md-option ng-repeat="status in statuses track by status.id" ng-value="status.id">
                                 {{ status.title }}
                             </md-option>
                         </md-select>
@@ -39,10 +38,8 @@
                         </md-select>
                     </md-input-container>
                 </div>
-
             </div>
         </md-dialog-content>
-
         <md-dialog-actions>
             <div flex="30" layout="row" layout-align="start">
                 <md-button class="md-warn md-raised"

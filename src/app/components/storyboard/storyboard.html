@@ -1,6 +1,6 @@
-<div>
+<div id="storyboard-page" ng-cloak>
     <toolbar></toolbar>
-    <div id="storyboard" ng-cloak>
+    <div id="storyboard">
         <div class="list"
              ng-if="storyboard.lists.length"
              ng-repeat="list in storyboard.lists | orderBy: list.order track by list.id"
@@ -54,13 +54,3 @@
         </div>
     </div>
 </div>
-
-<!--<li class="story list-drop-zone">
-    <div class="drop-zone"
-         ondrop="angular.element(this).scope().drop(event)"
-         ondragover="angular.element(this).scope().dragOver(event)"
-         ondragleave="angular.element(this).scope().dragLeave(event)"
-         ondragend="angular.element(this).scope().dragEnd()"
-    >
-    </div>
-</li>-->

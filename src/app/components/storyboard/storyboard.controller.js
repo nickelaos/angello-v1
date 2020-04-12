@@ -4,7 +4,18 @@ import ListTemplate from './list/list.html';
 import StoryController from './story/story.controller';
 import StoryTemplate from './story/story.html';
 
-StoryboardController.$inject = ['$rootScope', '$scope', '$state', '$location', '$mdDialog', '$timeout', 'StoriesService', 'ListsService', 'DNDService', 'STORY_TYPES'];
+StoryboardController.$inject = [
+    '$rootScope',
+    '$scope',
+    '$state',
+    '$location',
+    '$mdDialog',
+    '$timeout',
+    'StoriesService',
+    'ListsService',
+    'DNDService',
+    'STORY_TYPES'
+];
 export default StoryboardController;
 
 function StoryboardController($rootScope,
@@ -24,12 +35,6 @@ function StoryboardController($rootScope,
     storyboard.showListDialog = showListDialog;
     storyboard.setCurrentStory = setCurrentStory;
     storyboard.showStoryDialog = showStoryDialog;
-
-    window.$rootScope = $rootScope; // temp
-    window.$scope = $scope; // temp
-    window.stories = storyboard.stories; // temp
-    window.DNDService = DNDService; // temp
-    window.StoriesService = StoriesService; // temp
 
     init();
 
@@ -85,7 +90,6 @@ function StoryboardController($rootScope,
             return docData;
         });
         ListsService.setLists(storyboard.lists);
-        setBodyWidth(); //
         $rootScope.$apply();
     }
 
@@ -141,7 +145,6 @@ function StoryboardController($rootScope,
                 data: storyboard.editedStory,
                 action: action, // create or edit
                 listId: listId, // status
-                lastOrderIndex: storyboard.lastOrderIndex || 0
             }
         })
             .then(response => {
@@ -162,19 +165,10 @@ function StoryboardController($rootScope,
                 data: storyboard.editedList || {},
                 action: action, // create or edit or delete
                 storiesInList: action !== 'create' ? storyboard.stories.filter(story => story.listId === storyboard.editedList.id).map(story => story.id) : [],
-                //lastOrderIndex: storyboard.lastOrderIndex || 0
             }
         })
-        .then(response => {
-
-        })
+        .then(response => {})
         .catch(e => console.log(e.message));
-    }
-
-    function setBodyWidth() {
-        if (window.innerWidth < storyboard.lists.length * 330) {
-            document.body.style.width = (storyboard.lists.length * 330) + 'px';
-        }
     }
 
     $rootScope.$on('create_list', () => {
@@ -192,7 +186,7 @@ function StoryboardController($rootScope,
 
     $rootScope.$on('create_story', () => {
         setCurrentStory(null);
-        showStoryDialog(null, 'create', 1);
+        showStoryDialog(null, 'create', null);
     });
 
     $rootScope.$on('refreshStoryboard', () => {

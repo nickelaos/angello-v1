@@ -1,18 +1,15 @@
 import AuthService from './services/auth.service';
 
-run.$inject = ['$rootScope', '$location', '$transitions', '$state', 'StoriesService'];
+run.$inject = ['$rootScope', '$location', '$transitions', '$state'];
 
-export default function run($rootScope, $location, $transitions, $state, StoriesService) {
+export default function run($rootScope, $location, $transitions, $state) {
     $rootScope.AuthService = new AuthService();
-    //console.log(StoriesService);
 
     firebase.auth().onAuthStateChanged(user => {
         if (user) {
-            console.log('User logged IN');
             localStorage.setItem('userUID', user.uid);
             $rootScope.userLoggedIn = true;
         } else {
-            console.log('User logged OUT');
             localStorage.setItem('userUID', null);
             $rootScope.userLoggedIn = false;
             $state.go('/auth');
@@ -20,6 +17,7 @@ export default function run($rootScope, $location, $transitions, $state, Stories
         $rootScope.$emit('authStateChanged');
     });
 
+    // TODO: LoadingService
     /*$rootScope.$on('$routeChangeStart', function (e, curr, prev) {
         //LoadingService.setLoading(true);
     });*/

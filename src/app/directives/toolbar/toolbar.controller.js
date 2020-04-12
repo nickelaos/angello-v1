@@ -7,17 +7,17 @@ function ToolbarController($rootScope, $location) {
 
     toolbar.menuItems = [
         {
-            title: 'Create List',
-            value: 'create_list'
-        },
-        {
             title: 'Create Story',
             value: 'create_story'
         },
         {
+            title: 'Create List',
+            value: 'create_list'
+        },
+        /*{
             title: 'Create Type',
             value: 'create_type'
-        }
+        }*/
     ];
 
     function logout() {

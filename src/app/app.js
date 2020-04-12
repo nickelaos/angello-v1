@@ -23,7 +23,7 @@ import toolbar from './directives/toolbar/toolbar.directive';
 import StoriesService from './services/stories.service';
 import ListsService from './services/lists.service';
 import DNDService from './services/dnd.service.js';
-import STORY_TYPES from './services/storyTypes.service'; // temp
+import STORY_TYPES from './services/storyTypes.service'; // TODO: add story types
 
 angular
     .module('app', [

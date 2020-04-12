@@ -1,4 +1,15 @@
-StoryController.$inject = ['$rootScope', '$scope', '$location', '$mdDialog', 'StoriesService', 'ListsService', 'STORY_TYPES', 'data', 'action', 'listId', 'lastOrderIndex', 'DNDService'];
+StoryController.$inject = [
+    '$rootScope',
+    '$scope',
+    '$location',
+    '$mdDialog',
+    'StoriesService',
+    'ListsService',
+    'STORY_TYPES',
+    'data',
+    'action',
+    'listId'
+];
 
 function StoryController($rootScope,
                          $scope,
@@ -9,9 +20,7 @@ function StoryController($rootScope,
                          STORY_TYPES,
                          data,
                          action,
-                         listId,
-                         lastOrderIndex,
-                         DNDService) {
+                         listId) {
 
     $scope.storyData = angular.copy(data);
     $scope.action = action;
@@ -51,7 +60,7 @@ function StoryController($rootScope,
             $scope.storyData = {
                 listId: ListsService.lists[0].id,
                 type: STORY_TYPES[0].value,
-                order: lastOrderIndex + 1,
+                order: ListsService.lists[ListsService.lists.length - 1].order + 1000,
                 userUID: userUID
             }
         }
@@ -107,7 +116,6 @@ function StoryController($rootScope,
         resetForm();
         $mdDialog.hide();
     }
-
 
 }
 

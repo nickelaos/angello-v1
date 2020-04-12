@@ -6,64 +6,74 @@
 /* General
 -------------------------------------------------- */
 .md-primary-green {
-    background-color: $darkGreen !important;
-    color: white !important;
+  background-color: $darkGreen !important;
+  color: white !important;
 }
 
 .md-primary-dark {
-    background-color: $dark !important;
-    color: white !important;
+  background-color: $dark !important;
+  color: white !important;
 }
 
 .md-primary-light {
-    background-color: $light !important;
-    color: $dark !important;
+  background-color: $light !important;
+  color: $dark !important;
 }
 
 .md-primary-red {
-    background-color: $red !important;
-    color: white !important;
+  background-color: $red !important;
+  color: white !important;
 }
 
 .bg-green {
-    background-color: $darkGreen !important;
+  background-color: $darkGreen !important;
 }
 
 html {
-    overflow: auto;
+  overflow: auto;
 }
 
 body {
-    min-height: 100%;
+  min-height: 100%;
 
-    .main {
-        height: 100%;
+  .main {
+    height: 100%;
 
-        md-content {
-            color: white;
-        }
-
-        .logo {
-            height: 40px;
-            width: 144px;
-        }
+    md-content {
+      color: white;
     }
+
+    .logo {
+      height: 40px;
+      width: 144px;
+    }
+  }
 }
 
 md-checkbox.md-checked .md-ink-ripple {
-    color: $darkGreen !important;
+  color: $darkGreen !important;
 
-    .md-icon {
-        background-color: $darkGreen !important;
-    }
+  .md-icon {
+    background-color: $darkGreen !important;
+  }
 }
 
-/* Toolbar menu */
 .md-menu {
-    margin: 0 !important;
+  margin: 0 !important;
 }
 
-.md-toolbar-tools {
-    position: fixed;
-    background-color: $darkGreen;
+md-input-container.md-default-theme:not(.md-input-invalid).md-input-focused .md-input,
+md-input-container:not(.md-input-invalid).md-input-focused .md-input,
+md-input-container.md-default-theme:not(.md-input-invalid).md-input-resized .md-input,
+md-input-container:not(.md-input-invalid).md-input-resized .md-input {
+  border-color: $darkGreen !important;
+}
+
+md-input-container.md-default-theme:not(.md-input-invalid).md-input-has-value label,
+md-input-container:not(.md-input-invalid).md-input-has-value label,
+md-input-container.md-default-theme .md-placeholder,
+md-input-container .md-placeholder,
+md-input-container.md-default-theme label,
+md-input-container label {
+    color: $darkGreen !important;
 }
