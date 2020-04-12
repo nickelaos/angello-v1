@@ -1,0 +1,52 @@
+<!-- https://github.com/ducrot/starter-webpack-angularjs -->
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Angello</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <link href="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.9/angular-material.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+<link href="app.b90b01210224c56cc0a7.css" rel="stylesheet"></head>
+<body ng-app="app" ng-controller="AppController as app" ng-strict-di>
+<main class="main" role="main">
+    <ui-view></ui-view>
+</main>
+<footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/web-animations/2.3.1/web-animations.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/hammer.js/2.0.8/hammer.min.js"></script>
+    <script src="https://unpkg.com/muuri@0.6.3/dist/muuri.min.js"></script>
+
+    <!--Firebase-->
+    <script src="https://www.gstatic.com/firebasejs/7.6.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.6.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.6.1/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.6.1/firebase-functions.js"></script>
+
+    <script>
+
+        var firebaseConfig = {
+            apiKey: "AIzaSyD4j2eGTvnMQWLQPgdFrDD5cUVFtZJ8MCk",
+            authDomain: "angello-a56cb.firebaseapp.com",
+            databaseURL: "https://angello-a56cb.firebaseio.com",
+            projectId: "angello-a56cb",
+            storageBucket: "angello-a56cb.appspot.com",
+            messagingSenderId: "1029380295273",
+            appId: "1:1029380295273:web:46a34a26e2b53068c730f8"
+        };
+
+        firebase.initializeApp(firebaseConfig);
+
+        const fbAuth = firebase.auth();
+        const db = firebase.firestore();
+        const functions = firebase.functions();
+
+    </script>
+
+</footer>
+
+<script type="text/javascript" src="app.b90b01210224c56cc0a7.js"></script></body>
+</html>

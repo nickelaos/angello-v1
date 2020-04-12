@@ -1,6 +1,9 @@
 /* @ngInject */
 function routing($stateProvider, $urlRouterProvider) {
-    $urlRouterProvider.otherwise('/');
+    const falsyValues = [null, 'null', undefined, ''];
+    const userUID = localStorage.getItem('userUID');
+    const redirectPath = falsyValues.includes(userUID) ? '/auth' : '/';
+    $urlRouterProvider.otherwise(redirectPath);
 }
 
 export default {
