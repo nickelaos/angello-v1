@@ -4,7 +4,9 @@
         <div class="list"
              ng-if="storyboard.lists.length"
              ng-repeat="list in storyboard.lists | orderBy: list.order track by list.id"
-             ng-attr-id="{{ list.id }}">
+             ng-attr-id="{{ list.id }}"
+             ng-attr-order="{{ list.order }}"
+        >
             <div class="list-header">
                 <h3>{{list.title}}</h3>
                 <md-menu md-position-mode="target-right bottom" md-offset="0 8">

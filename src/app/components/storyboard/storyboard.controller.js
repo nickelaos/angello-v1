@@ -4,7 +4,7 @@ import ListTemplate from './list/list.html';
 import StoryController from './story/story.controller';
 import StoryTemplate from './story/story.html';
 
-StoryboardController.$inject = ['$rootScope', '$scope', '$state', '$location', '$mdDialog', 'StoriesService', 'ListsService', 'DNDService', 'STORY_TYPES'];
+StoryboardController.$inject = ['$rootScope', '$scope', '$state', '$location', '$mdDialog', '$timeout', 'StoriesService', 'ListsService', 'DNDService', 'STORY_TYPES'];
 export default StoryboardController;
 
 function StoryboardController($rootScope,
@@ -12,24 +12,13 @@ function StoryboardController($rootScope,
                               $state,
                               $location,
                               $mdDialog,
+                              $timeout,
                               StoriesService,
                               ListsService,
                               DNDService,
                               STORY_TYPES) {
 
     const storyboard = this;
-
-    storyboard.currentListId = null;
-    storyboard.currentList = {};
-    storyboard.editedList = {};
-
-    storyboard.currentStoryId = null;
-    storyboard.currentStory = null;
-    storyboard.editedStory = {};
-
-    storyboard.stories = [];
-    storyboard.types = STORY_TYPES;
-    storyboard.lists = [];
 
     storyboard.setCurrentList = setCurrentList;
     storyboard.showListDialog = showListDialog;
@@ -47,8 +36,25 @@ function StoryboardController($rootScope,
     // METHODS --------------------------------------------------------
 
     function init() {
+        resetStoryboard();
         getLists();
         getStories();
+    }
+
+    function resetStoryboard() {
+        storyboard.currentListId = null;
+        storyboard.currentList = {};
+        storyboard.editedList = {};
+
+        storyboard.currentStoryId = null;
+        storyboard.currentStory = null;
+        storyboard.editedStory = {};
+
+        storyboard.stories = [];
+        storyboard.types = STORY_TYPES;
+        storyboard.lists = [];
+
+        $rootScope.DNDinited = false;
     }
 
     function setCurrentList(list) {
@@ -78,12 +84,8 @@ function StoryboardController($rootScope,
             docData.id = doc.id;
             return docData;
         });
-
         ListsService.setLists(storyboard.lists);
-
-        setBodyWidth();
-
-        //storyboard.lastOrderIndex = defineLastOrderIndex();
+        setBodyWidth(); //
         $rootScope.$apply();
     }
 
@@ -98,12 +100,17 @@ function StoryboardController($rootScope,
                     DNDService.columnGrids && DNDService.columnGrids.forEach(grid => {
                         DNDService.deleteDraggedElement(grid);
                     });
+
                     DNDService.originListId = null;
                     DNDService.targetListId = null;
+
+                    $timeout(() => {
+                        $rootScope.$emit('refreshStoryboard');
+                    }, 250);
                 }
 
                 if (!$rootScope.DNDinited) {
-                    DNDService.init(StoriesService);
+                    DNDService.init(StoriesService, ListsService);
                     $rootScope.DNDinited = true;
                 }
 
@@ -118,10 +125,7 @@ function StoryboardController($rootScope,
             docData.id = doc.id;
             return docData;
         });
-
         StoriesService.setStories(storyboard.stories);
-
-        //storyboard.lastOrderIndex = defineLastOrderIndex();
         $rootScope.$apply();
     }
 
@@ -173,39 +177,6 @@ function StoryboardController($rootScope,
         }
     }
 
-    function resetStoryboard() {
-        storyboard.currentListId = null;
-        storyboard.currentList = {};
-        storyboard.editedList = {};
-
-        storyboard.currentStoryId = null;
-        storyboard.currentStory = null;
-        storyboard.editedStory = {};
-
-        storyboard.stories = [];
-        storyboard.types = STORY_TYPES;
-        storyboard.lists = [];
-
-        $rootScope.DNDinited = false;
-    }
-
-    /*function defineLastOrderIndex() {
-        let lastOrderIndex = 0;
-        storyboard.stories.forEach(story => {
-            if (story.order > lastOrderIndex)
-                lastOrderIndex = story.order;
-        });
-        return lastOrderIndex;
-    }*/
-
-    /* EVENT LISTENERS & WATCHERS */
-    /*$rootScope.$watch('lists', () => {
-        $rootScope.$apply();
-    });*/
-    /*document.addEventListener('storyboard.lists', () => {
-        console.log(111);
-    });*/
-
     $rootScope.$on('create_list', () => {
         setCurrentList(null);
         showListDialog(null, 'create');
@@ -225,7 +196,6 @@ function StoryboardController($rootScope,
     });
 
     $rootScope.$on('refreshStoryboard', () => {
-        resetStoryboard();
         init();
     });
 

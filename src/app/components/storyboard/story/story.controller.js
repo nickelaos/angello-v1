@@ -64,7 +64,6 @@ function StoryController($rootScope,
     function createStory() {
         $scope.storyData.order = defineMaxStoryIndexWithinList();
         $scope.storyData.createdAt = Date.now();
-        //$rootScope.storyCreated = true;
         StoriesService.addStory($scope.storyData)
             .then(response => {
                 closeDialog();

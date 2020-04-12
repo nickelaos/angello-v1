@@ -1,10 +1,12 @@
 /* https://gist.github.com/CodeMyUI/f1fabbe16f012f23276289cbfc2801b7 */
+/* https://github.com/haltu/muuri */
 
 export default class DNDService {
 
-    init(StoriesService) {
+    init(StoriesService = null, ListsService = null) {
         var self = this;
         this.StoriesService = StoriesService;
+        this.ListsService = ListsService;
 
         var itemContainers = [].slice.call(document.querySelectorAll('.list-content'));
         var columnGrids = [];
@@ -24,14 +26,17 @@ export default class DNDService {
                     return columnGrids;
                 },
                 dragSortInterval: 0,
+                dragStartPredicate: {
+                    delay: 250
+                },
                 dragContainer: document.body,
                 dragReleaseDuration: 400,
                 dragReleaseEasing: 'ease'
             })
                 .on('dragStart', function (item) {
-                    // Let's set fixed widht/height to the dragged item
+                    // Let's set fixed width/height to the dragged item
                     // so that it does not stretch unwillingly when
-                    // it's appended to the document body for the
+                    // it's happended to the document body for the
                     // duration of the drag.
                     item.getElement().style.width = item.getWidth() + 'px';
                     item.getElement().style.height = item.getHeight() + 'px';
@@ -66,12 +71,16 @@ export default class DNDService {
                     const gridElements = grid._items.map(item => item._element);
 
                     const draggableItemIndexInGrid = gridElements.findIndex(el => el.id === draggableItemId);
-                    const prevSiblingId = (draggableItemIndexInGrid !== 0) ? gridElements[draggableItemIndexInGrid - 1].id : null;
-                    const nextSiblingId = (draggableItemIndexInGrid !== gridElements.length - 1) ? gridElements[draggableItemIndexInGrid + 1].id : null;
+                    const prevSiblingOrder = (draggableItemIndexInGrid !== 0)
+                        ? +gridElements[draggableItemIndexInGrid - 1].attributes.order.value
+                        : null;
+                    const nextSiblingOrder = (draggableItemIndexInGrid !== gridElements.length - 1)
+                        ? +gridElements[draggableItemIndexInGrid + 1].attributes.order.value
+                        : null;
 
-                    const newOrderIndex = self.defineOrderOfDroppedElement(draggableItemId, draggableItemOrder, prevSiblingId, nextSiblingId, targetListId);
+                    const newOrderIndex = self.defineOrderOfDroppedElement(draggableItemId, draggableItemOrder, prevSiblingOrder, nextSiblingOrder);
 
-                    self.grid = grid;
+                    self.grid = grid; //
                     self.draggableItemId = draggableItemId;
                     self.draggableItemIndexInGrid = draggableItemIndexInGrid;
                     self.targetListId = targetListId;
@@ -100,8 +109,7 @@ export default class DNDService {
 
         });
 
-        this.columnGrids = columnGrids; // temp
-        window.columnGrids = this.columnGrids; // temp
+        this.columnGrids = columnGrids;
 
         // Instantiate the board grid so we can drag those
         // columns around.
@@ -115,45 +123,79 @@ export default class DNDService {
             },
             dragReleaseDuration: 400,
             dragReleaseEasing: 'ease'
-        });
+        })
+        .on('dragStart', function (item) {
+            item.getElement().style.width = item.getWidth() + 'px';
+            item.getElement().style.height = item.getHeight() + 'px';
+        })
+        .on('dragReleaseEnd', function (item) {
+            item.getElement().style.width = '';
+            item.getElement().style.height = '';
+
+            const grid = item.getGrid();
+            const gridElements = grid._items.map(item => item._element);
+
+            // Define new order index
+            const draggableList = item.getElement();
+
+            const draggableListId = draggableList.id;
+            const draggableListOrder = +draggableList.attributes.order.value;
+
+            const draggableListIndexInGrid = gridElements.findIndex(el => el.id === draggableListId);
+            const prevSiblingOrder = (draggableListIndexInGrid !== 0)
+                ? +gridElements[draggableListIndexInGrid - 1].attributes.order.value
+                : null;
+            const nextSiblingOrder = (draggableListIndexInGrid !== gridElements.length - 1)
+                ? +gridElements[draggableListIndexInGrid + 1].attributes.order.value
+                : null;
+
+            const newOrderIndex = self.defineOrderOfDroppedElement(draggableListId, draggableListOrder, prevSiblingOrder, nextSiblingOrder);
+
+            self.grid = grid; //
+            self.draggableListId = draggableListId;
+
+            if (newOrderIndex === draggableListOrder) return;
+
+            // Update list with new order index in DB
+            const list = ListsService.lists.find(list => list.id === draggableListId);
+            list.order = newOrderIndex;
+
+            ListsService.editList(list)
+                .then(() => {})
+                .catch(e => console.log(e.message));
+
+        })
     }
 
     /******************************************************************************************/
 
-    defineOrderOfDroppedElement(draggableItemId, draggableItemOrder, prevSiblingId, nextSiblingId, targetListId) {
+    defineOrderOfDroppedElement(
+        draggableItemId,
+        draggableItemOrder,
+        prevSiblingOrder,
+        nextSiblingOrder
+    ) {
         const defaultOutput = 1000;
 
-        const storiesInList = this.StoriesService.stories.filter(story => story.listId === targetListId);
-        const orderNumbersInList = storiesInList.map(story => story.order);
+        if (!prevSiblingOrder && !nextSiblingOrder) return defaultOutput;
 
-        if (!orderNumbersInList.length) return defaultOutput;
-
-        const prevStoryOrder = prevSiblingId
-            ? storiesInList.find(story => story.id === prevSiblingId).order
-            : null;
-        const nextStoryOrder = nextSiblingId
-            ? storiesInList.find(story => story.id === nextSiblingId).order
-            : null;
-
-        if (!prevStoryOrder && !nextStoryOrder) return defaultOutput;
-
-        if (!prevStoryOrder && nextStoryOrder) {
-            if ((nextStoryOrder / 2) === draggableItemOrder)
+        if (!prevSiblingOrder && nextSiblingOrder) {
+            if ((nextSiblingOrder / 2) === draggableItemOrder)
                 return draggableItemOrder;
-            return nextStoryOrder / 2;
+            return nextSiblingOrder / 2;
         }
 
-        if (prevStoryOrder && !nextStoryOrder) {
-            if ((prevStoryOrder * 2) === draggableItemOrder)
+        if (prevSiblingOrder && !nextSiblingOrder) {
+            if ((prevSiblingOrder * 2) === draggableItemOrder)
                 return draggableItemOrder;
-            return prevStoryOrder * 2;
+            return prevSiblingOrder * 2;
         }
 
-        if (((prevStoryOrder + nextStoryOrder) / 2) === draggableItemOrder) {
+        if (((prevSiblingOrder + nextSiblingOrder) / 2) === draggableItemOrder) {
             return draggableItemOrder;
         }
 
-        return (prevStoryOrder + nextStoryOrder) / 2;
+        return (prevSiblingOrder + nextSiblingOrder) / 2;
     }
 
     deleteDraggedElement(grid) {
